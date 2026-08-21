@@ -23,6 +23,7 @@ function Footer () {
                 <a href="https://discord.com/invite/YGryhcRWqM" className="footerSocial socialDsicord" target="_blank" rel="noopener noreferrer"><SiDiscord /></a>
                 <a href="https://boosty.to/zianu" className="footerSocial socialBoosty" target="_blank" rel="noopener noreferrer"><SiBoosty /></a>
                 <a href="https://github.com/AzureLinker/azureplay-markdown-blog" className="footerSocial socialGit" target="_blank" rel="noopener noreferrer"><SiGithub /></a>
+                <a href="https://git.gay/AzureLinker/azureplay-markdown-blog" className="footerSocial" target="_blank" rel="noopener noreferrer"><img src="https://git.gay/assets/img/logo.svg" alt="git.gay repository"/></a>
                 <a href="https://gamejolt.com/@AzurePlay" className="footerSocial socialGJ" target="_blank" rel="noopener noreferrer"><SiGamejolt /></a>
                 <a href="https://azureplay.itch.io/" className="footerSocial socialItch" target="_blank" rel="noopener noreferrer"><SiItchdotio /></a>
                 <a href="https://www.twitch.tv/zianuvtube" className="footerSocial socialTwitch" target="_blank" rel="noopener noreferrer"><SiTwitch /></a>

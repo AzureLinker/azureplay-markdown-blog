@@ -129,7 +129,7 @@
     padding: .5em 0 .5em 0;
 }
 .siteFooter .siteCopyright{
-    margin: 0 1em 0 1em;
+    margin: 0 1em 0 .5em;
     background: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(152, 221, 255, 1) 50%, rgba(255, 255, 255, 1) 100%);
     font-size: 24px;
     background-clip: text;
@@ -157,6 +157,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.siteFooter .footerSocial:hover{
+    transform: scale(120%);
 }
 
 .siteFooter .socialYT{
@@ -615,6 +619,17 @@
     .gameCard .gameMeta{
         align-items: center;
     }
+    .siteFooter{
+        flex-direction: column;
+        gap: 1em;
+        margin-bottom: 1em;
+    }
+    .siteFooter .siteCopyright{
+        margin: 0 0.5em;
+    }
+    .siteFooter .siteSocials{
+        margin: 0 0.5em;
+    }
 }
 @media (max-width: 876px){
     .siteHeader a{
@@ -727,11 +742,6 @@
 @media (max-width: 425px) {
     .pageContentContainer {
         padding: 1em 0.3em;
-    }
-    .siteFooter{
-        flex-direction: column;
-        gap: 1em;
-        margin-bottom: 3em;
     }
     .postCard .postTitleNMeta{
         align-content: flex-start;
