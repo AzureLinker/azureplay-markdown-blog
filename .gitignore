@@ -10,6 +10,19 @@
 
 # production
 /build
+public/content/*
+public/img/blog_imgs/*
+public/img/blog-covers/*
+public/img/projects/games/*
+public/img/projects/levels/*
+public/img/projects/mods/*
+public/img/projects/proj/*
+public/posts.json
+public/tags.json
+public/projectsContent/Other/*
+public/projectsContent/Games/*
+public/projectsContent/Levels/*
+public/projectsContent/Mods/*
 
 # misc
 .DS_Store

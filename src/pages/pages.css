@@ -117,6 +117,61 @@
     background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
 }
 
+.postChapter{
+    color: #4493f8;
+    display: block;
+    padding: .5em 0;
+    text-decoration: none;
+    border-bottom: 1px solid #3d444db3;
+}
+.postChapter:hover{
+    filter: brightness(120%);
+    border-left: 4px inset #4493f8;
+}
+
+.postChapter-1{
+    padding-left: 1em;
+    background: #2b2b2b;
+}
+.postChapter-2{
+    padding-left: 1em;
+    background: #212121;
+    margin-left: 0.5em;
+}
+.postChapter-3{
+    padding-left: 1em;
+    background: #171717;
+    margin-left: 1em;
+}
+.postChapter-4{
+    padding-left: 1em;
+    background: #0e0e0e;
+    margin-left: 1.5em;
+}
+.postChapter-5{
+    padding-left: 1em;
+    background: #040404;
+    margin-left: 2em;
+}
+.postChapter-6{
+    padding-left: 1em;
+    background: #020202;
+    margin-left: 2.5em;
+}
+
+.windowPostChapters{
+    position: sticky;
+    top: 0;
+}
+
+.windowPostChapters .windowContent{
+    max-height: calc(100vh - 6em);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    text-align: left;
+}
+
 .bigPostTags span {
     padding: 0.2em 1em;
     background: linear-gradient(180deg,rgba(14, 93, 161, 1) 5%, rgba(16, 55, 113, 1) 20%, rgba(7, 28, 64, 1) 80%, rgba(0, 0, 0, 0) 100%);
@@ -140,6 +195,14 @@
     margin-bottom: 2em;
 }
 
+.post-image-clickable {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.post-image-clickable:hover {
+    opacity: 0.8;
+}
+
 .postDownloadButton {
     border-radius: 100%;
     border: solid 1px #9DBFDD;
@@ -152,6 +215,18 @@
 .postDownloadButton:hover{
     background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
 }
+.postDownloadButtonNew{
+    border-radius: 1em;
+    border: solid 1px #9DBFDD;
+    background: #71A3E0;
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(21, 10, 50, 1) 15%, rgba(56, 69, 117, 1) 90%, rgba(113, 163, 224, 1) 100%);
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    width: fit-content;
+}
+.postDownloadButtonNew:hover{
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
+}
 
 .postDownloadButton a{
     text-decoration: none;
@@ -160,6 +235,31 @@
     padding: 0.4em;
     vertical-align: -webkit-baseline-middle;
     display: flex;
+}
+.postDownloadButtonNew a{
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    padding: 0.4em;
+    vertical-align: -webkit-baseline-middle;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.postDownloadButtonNew button{
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    padding: 0.4em;
+    vertical-align: -webkit-baseline-middle;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    font-family: "Yanone Kaffeesatz", sans-serif;
+    cursor: pointer;
+    width: 100%;
 }
 
 .windowNameFlex{
@@ -249,7 +349,17 @@
     text-decoration: none;
     color: #fff;
 }
-
+.projectNameNMeta .projectName a{
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+    width: 100%;
+    display: block;
+}
+.projectNameNMeta .projectName a:hover{
+    color: #7ac1ff;
+}
 .projectCard .projectMeta{
     display: flex;
     justify-content: space-between;
@@ -306,12 +416,247 @@
 .projectCard .projectLinks a:hover{
     background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
 }
+.projectCard .projectAuthors{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    gap: 1em;
+    font-size: 14px;
+    margin-bottom: 1em;
+}
+.projectCard .projectAuthors span{
+    padding: 0.2em 1em;
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    border-radius: 1em;
+}
+
+.windowGroup-3row{
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+.callout {
+    border-left: 4px solid #0845a0;
+    border-radius: 0;
+    margin: 1em 0;
+    background: #0d6efd0d;
+    overflow: hidden;
+}
+
+.callout-header {
+    background: #0845a0;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.75em 1em;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    margin: 0;
+    transition: background 0.2s;
+}
+
+.callout-header:hover {
+    filter: brightness(120%);
+}
+
+.callout-icon::before {
+    content: '📝';
+    font-size: 1.1em;
+}
+
+.callout-title {
+    flex: 1;
+}
+
+.callout-arrow {
+    font-size: 1.2em;
+    opacity: 0.6;
+    transition: transform 0.2s;
+}
+
+.callout-body {
+    padding: 0 1em 0.75em 1em;
+    margin-top: 1em;
+}
+
+.callout-body > *:first-child {
+    margin-top: 0;
+}
+
+.callout-body > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Варианты */
+.callout-note {
+    border-left-color: #0845a0;
+    background: rgba(13, 110, 253, 0.05);
+}
+
+.callout-warning {
+    border-left-color: #ac8205;
+    background: #ffc1070d;
+}
+.callout-warning .callout-header{
+    background: #ac8205;
+}
+.callout-warning .callout-icon::before {
+    content: '⚠️';
+}
+
+.callout-info {
+    border-left-color: #0988a1;
+    background: #0dcaf00d;
+}
+
+.callout-info .callout-header{
+    background: #0988a1;
+}
+
+.callout-info .callout-icon::before {
+    content: 'ℹ️';
+}
+
+.callout-danger {
+    border-left-color: #9b2632;
+    background: #dc35450d;
+}
+
+.callout-danger .callout-header{
+    background: #9b2632;
+}
+
+.callout-danger .callout-icon::before {
+    content: '⚠️';
+}
+
+.callout-quote {
+    border-left-color: #2D6A4F;
+    background: #2d6a4f0d;
+}
+
+.callout-quote .callout-header{
+    background: #2D6A4F;
+}
+
+.callout-quote .callout-icon::before {
+    content: '❝';
+}
+
+.windowPostNew{
+    max-width: calc(100% - 1em - 384px);
+}
+.lightbox-Back{
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 50px;
+    background: none;
+    border: medium;
+    z-index: 10000;
+    border-radius: 4px;
+}
+.lightbox-Back:hover{
+    background: rgba(192, 215, 250, 0.192);
+}
+.lightbox-Next{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 50px;
+    background: none;
+    border: medium;
+    z-index: 10000;
+    border-radius: 4px;
+}
+.lightbox-Next:hover{
+    background: rgba(192, 215, 250, 0.192);
+}
+.lightbox-Counter{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: "Nunito", sans-serif;
+}
+.chapterToggle{
+    display: none;
+    width: 100%;
+    height: 48px;
+    border-radius: 1em;
+    border: solid 1px #9DBFDD;
+    background: #71A3E0;
+    background: linear-gradient(180deg, rgba(113, 163, 224, 1) 0%, rgba(34, 32, 75, 1) 15%, rgba(21, 10, 50, 1) 35%, rgba(21, 10, 50, 1) 75%, rgba(56, 69, 117, 1) 90%, rgba(113, 163, 224, 1) 100%);
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    font-family: "Yanone Kaffeesatz", sans-serif;
+    max-width: 1290px;
+    font-size: 24px;
+    margin: auto;
+    color: #fff;
+    box-sizing: border-box;
+}
+.chapterToggle.chapterToggleOpen{
+    border-radius: 1em 1em 0 0;
+}
+.postOldActionButton{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+.markdown-body .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.gallery-item {
+    overflow: hidden;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.markdown-body img .gallery-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
 
 @media (max-width: 1024px) {
+    .windowGroup-3row{
+        flex-wrap: wrap;
+    }
     .windowBlogTags{
         max-width: 100%;
         text-align: left;
         margin-bottom: 0;
+    }
+    .windowPostChapters{
+        position: relative;
+    }
+    .windowPostChapters .windowContent{
+        max-height: 300px;
+    }
+    .windowPostNew{
+        max-width: 100%;
     }
     .profileBars{
         display: flex;
@@ -339,6 +684,10 @@
     .projectCard .projectMeta{
         align-items: center;
     }
+    .postOldActionButton{
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
 }
 
 @media (max-width: 768px) {
@@ -351,8 +700,17 @@
         justify-content: center;
         align-items: center;
     }
+    .postDownloadButton{
+        width: 100%;
+        border-radius: 1em;
+        text-align: center;
+    }
     .postDownloadButton a{
         font-size: 24px;
+        width: 100%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
     }
     .projectCard .projectDescNPicture{
         flex-direction: column-reverse;
@@ -360,6 +718,61 @@
     }
     .projectDescNPicture .projectPicture img{
         max-width: 100%;
+    }
+    .projectNameNMeta .projectName{
+        width: 100%;
+    }
+    .windowNameFlex{
+        gap: 1em;
+        flex-direction: column;
+    }
+    .postDownloadButtonNew{
+        width: 100%;
+    }
+    .lightbox-Back{
+        top: 90%;
+    }
+    .lightbox-Next{
+        top: 90%;
+    }
+    .chapterToggle{
+        display: block;
+    }
+    .windowChaptersName{
+        display: none;
+    }
+    .chapterGroup.chapterGroupOpen{
+        display: block;
+    }
+    .chapterGroup{
+        display: none;
+    }
+    .postOldActionButton{
+        width: 100%;
+    }
+    .postChapter-1{
+        padding-left: .5em;
+        margin-left: 0;
+    }
+    .postChapter-2{
+        padding-left: 1em;
+        margin-left: 0;
+    }
+    .postChapter-3{
+        padding-left: 1.5em;
+        margin-left: 0;
+    }
+    .postChapter-4{
+        padding-left: 2em;
+        margin-left: 0;
+    }
+    .postChapter-5{
+        padding-left: 2.5em;
+        margin-left: 0;
+    }
+    .postChapter-6{
+        padding-left: 3em;
+        margin-left: 0;
     }
 }
 
@@ -403,6 +816,7 @@
     }
     .bigPostAuthorNDate{
         flex-wrap: wrap;
+        gap: 1em;
     }
     .projectCard .projectLinks{
         flex-direction: column;
@@ -430,6 +844,16 @@
         text-align: center;
         display: flex;
         justify-content: center;
+    }
+    .lightbox-Back{
+        font-size: 24px;
+        bottom: 20px;
+        top: auto;
+    }
+    .lightbox-Next{
+        font-size: 24px;
+        bottom: 20px;
+        top: auto;
     }
 }
 

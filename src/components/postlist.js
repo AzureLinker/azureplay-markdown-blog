@@ -6,27 +6,10 @@ import { Link } from 'react-router-dom';
 import "./components.css"
 import "./markdown.css"
 
-function PostList ({ filterTag }) {
-    const [postlist, setPostlist] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    
-    //Настройки пагинации и поиска
+function PostList ({ filterTag, postlist }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 10; // Сколько постов показывать на одной странице
-
-    useEffect(() => {
-        fetch('/json/posts.json') // Путь относительно папки public в билде
-            .then(response => response.json())
-            .then(data => {
-                setPostlist(data);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.error("Ошибка загрузки постов:", err);
-                setIsLoading(false);
-            });
-    }, []);
 
     // Сбрасываем страницу на первую, если изменился выбранный тег
     useEffect(() => {
@@ -60,8 +43,6 @@ function PostList ({ filterTag }) {
         setSearchQuery(e.target.value);
         setCurrentPage(1); 
     };
-
-    if (isLoading) return <p>Загрузка постов...</p>;
     return (
         <div className="BlogPostSummary">
             {/* Пагинация */}
@@ -98,7 +79,7 @@ function PostList ({ filterTag }) {
                                 <div className="postName">
                                     <Link className="postName" to={`/post/${post.id}`}>{post.title}</Link>
                                 </div>
-                                <div className="postMeta">{post.author} - {post.date}</div>
+                                <div className="postMeta">{post.author} - {new Date(post.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
                             </div>
                             <div className="postShortNPicture">
                                 <div className="postShort markdown-body" data-theme="dark">
@@ -107,7 +88,7 @@ function PostList ({ filterTag }) {
                                     </ReactMarkdown>
                                 </div>
                                 <div className="postPicture">
-                                    <img src={post.cover} alt="Обложка поста"/>
+                                    <img src={post.cover} alt="Обложка поста" loading="lazy"/>
                                 </div>
                             </div>
                             <div className="postTags">

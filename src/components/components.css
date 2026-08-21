@@ -12,12 +12,15 @@
     margin: auto;
     margin-top: 11px;
     margin-bottom: 11px;
+    z-index: 1000;
 }
 .siteHeader .navGroup{
     display: inline-flex;
     width: 100%;
     height: 48px;
     align-items: center;
+    z-index: 1000;
+    position: relative;
 }
 
 .siteHeader a{
@@ -25,7 +28,7 @@
     font-weight: 500;
     text-decoration: none;
     font-size: 32px;
-    padding: 0 1em 0 1em;
+    padding: 0 .5em 0 .5em;
     width: 100%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -41,6 +44,74 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     transition: all 0.2s ease-out;
+}
+
+.navDrpDwn{
+    position: relative;
+    width: 100%;
+}
+.navDrpDwn.navDrpOpn .drpDwnCnt{
+    display: block;
+}
+.navDrpDwnBtn{
+    background: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(152, 221, 255, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 32px;
+    width: 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border: none;
+    transition: background 0.2s ease-out;
+    font-family: "Yanone Kaffeesatz", sans-serif;
+    text-align: left;
+}
+.navDrpDwnBtn::after{
+    content: "▶";
+    color: #fff;
+    font-size: 1rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: .5em;
+}
+.navDrpDwnBtn.navDrpBtnClck::after{
+    content: "▼";
+}
+.navDrpDwnBtn:hover{
+    color: white;
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+}
+.drpDwnCnt{
+    position: absolute;
+    top: 115%;
+    background-color: #2A2A2A;
+    border-radius: 0 0 1em 1em;
+    border-bottom: 1px solid #9DBFDD;
+    border-left: 1px solid #9DBFDD;
+    border-right: 1px solid #9DBFDD;
+    box-shadow: inset 0 0 6.8px #1B1E5C;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    height: auto;
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+
+.drpDwnCnt a{
+    display: block;
+    padding: .2em 1em;
+    border-bottom: 1px solid #9DBFDD;
+    border-radius: 0;
+}
+
+.drpDwnCnt a:last-child{
+    border: none;
 }
 
 .siteFooter{
@@ -64,11 +135,16 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    flex: 1;
+}
+.siteFooter .siteVersion{
+    text-align: center;
 }
 
 .siteFooter .siteSocials{
     margin-right: .5em;
     display: inline-flex;
+    flex: 1;
 }
 
 .siteFooter .footerSocial{
@@ -118,6 +194,10 @@
     color: #fff;
     font-size: 20px;
 }
+.siteFooter .socialRSS{
+    color: #FFA500;
+    font-size: 32px;
+}
 
 .pageContentContainer{
     width: 100%;
@@ -162,7 +242,6 @@
 .gameCard .gameScore{
     margin-top: 0;
     margin-bottom: 0;
-    text-align: right;
     font-size: 18px;
 }
 
@@ -396,12 +475,133 @@
     padding: 5px 10px;
     cursor: pointer;
 }
+
+.projectLinks{
+    margin-bottom: 1em;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.projectLinks a{
+    border-radius: 1em;
+    border: solid 1px #9DBFDD;
+    background: #71A3E0;
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(21, 10, 50, 1) 15%, rgba(56, 69, 117, 1) 90%, rgba(113, 163, 224, 1) 100%);
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    padding: .5em;
+    text-decoration: none;
+    width: fit-content;
+    color: #fff;
+}
+.projectLinks a:hover{
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
+}
+
+.backlog-progress-container { /* Подстройте под ваш фон */
+    padding: 1em;
+    box-sizing: border-box;
+    background-color: #2A2A2A;
+    border-radius: 1em;
+    border: 1px solid #9DBFDD;
+    box-shadow: inset 0 0 6.8px #1B1E5C;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    margin-bottom: 1em;
+}
+
+.backlog-progress-container .progress-stack-bar {
+    display: flex;
+    height: 24px;
+    border-radius: 1em;
+    overflow: hidden; /* Чтобы края сегментов скруглялись по родителю */
+    background: #2B2B2B;
+    margin: 1em 0;
+    border: solid 1px #9DBFDD;
+}
+.backlog-progress-container .stats-title{
+    margin-top: 0;
+}
+.backlog-progress-container .bar-segment {
+    height: 100%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.backlog-progress-container .progress-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    font-size: 0.9em;
+    justify-content: space-between;
+    margin-bottom: 1em;
+}
+.backlog-progress-container .legend-item {
+    display: flex;
+    align-items: center;
+}
+.backlog-progress-container .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5em;
+}
+
+.backlog-progress-container .bar-segment{
+    transition: transform 0.2s, opacity 0.2s;
+}
+.backlog-progress-container .bar-segment:hover{
+    filter: brightness(1.4);
+}
+
+.backlog-progress-container .active-segment{
+    outline: 1px solid #9DBFDD; /* Выделяем рамкой активный фильтр */
+    outline-offset: 0px;
+    box-shadow: inset 0px -4px 8px 0px #1b1e5cb3;
+    filter: contrast(1.5);
+}
+
+.backlog-progress-container .backlogFilter-btn{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.backlog-progress-container .backlogFilter-btn button{
+    border-radius: 1em;
+    border: solid 1px #9DBFDD;
+    background: #71A3E0;
+    background: linear-gradient(180deg, rgba(113, 163, 224, 1) 0%, rgba(21, 10, 50, 1) 15%, rgba(56, 69, 117, 1) 90%, rgba(113, 163, 224, 1) 100%);
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    padding: .5em 1em;
+    text-decoration: none;
+    width: fit-content;
+    color: #fff;
+    cursor: pointer;
+}
+.backlog-progress-container .backlogFilter-btn button:hover{
+    background: linear-gradient(180deg, rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
+}
+
+.backlog-progress-container .active-legend{
+    border-bottom: solid 1px #9DBFDD;
+}
+
+.backlog-progress-container .segment-прохожу, .dot-прохожу { background: linear-gradient(180deg, #f1c40f 0%, #f39c12 100%); }
+.backlog-progress-container .segment-пройдено-несколько-раз, .dot-пройдено-несколько-раз { background: linear-gradient(180deg, #1abc9c 0%, #16a085 100%); }
+.backlog-progress-container .segment-хочу-пройти, .dot-хочу-пройти { background: linear-gradient(180deg, #3498db 0%, #2980b9 100%); }
+.backlog-progress-container .segment-пройдено, .dot-пройдено { background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%); }
+.backlog-progress-container .segment-перепрохожу, .dot-перепрохожу { background: linear-gradient(180deg, #9b59b6 0%, #8e44ad 100%); }
+.backlog-progress-container .segment-заброшено, .dot-заброшено { background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%); }
+.backlog-progress-container .segment-не-указано, .dot-не-указано { background: linear-gradient(180deg, #bdc3c7 0%, #95a5a6 100%); }
+
 @media (max-width: 1024px) {
     .windowGroup-2row{
         flex-direction: column-reverse;
     }
     .siteHeader a{
-        padding: 0 .5em;
+        padding: 0.2em .5em;
         text-align: center;
     }
     .gameCard .gameScore{
@@ -414,6 +614,15 @@
     }
     .gameCard .gameMeta{
         align-items: center;
+    }
+}
+@media (max-width: 876px){
+    .siteHeader a{
+        padding: .2em .2em;
+    }
+    .navDrpDwnBtn::after{
+        margin: 0;
+        font-size: 0.8rem;
     }
 }
 
@@ -439,7 +648,6 @@
     }
     .siteHeader.siteHeaderOpen{
         border-radius: 1em 1em 0 0;
-        margin-bottom: 15em;
     }
     .siteHeader{
         border:none;
@@ -455,10 +663,14 @@
         box-shadow: inset 0 0 6.8px #1B1E5C;
         box-shadow: 0 4px 11px -2px #4F91FB;
         flex-direction: column;
+        flex-wrap: nowrap;
         height: auto;
+        max-height: calc(100vh - 64px);
+        overflow-y: scroll;
     }
     .navGroup.navGroupOpen{
         display: inline-flex;
+        flex-direction: row;
     }
 
     .siteHeader a {
@@ -468,6 +680,22 @@
     }
     .siteHeader a:last-child{
         border: 0;
+    }
+    .navDrpDwnBtn{
+        border-bottom: 1px solid #9DBFDD;
+        text-align: center;
+        padding: .2em 0;
+    }
+    .navDrpDwnBtn::after{
+        margin-left: .5em;
+        font-size: 1rem;
+    }
+    .drpDwnCnt{
+        position: relative;
+        border-radius: 0;
+        border-bottom: 1px solid #9DBFDD;
+        background-color: #161616;
+        box-shadow: none;
     }
     .blogPagination{
         justify-content: space-between;
@@ -503,6 +731,7 @@
     .siteFooter{
         flex-direction: column;
         gap: 1em;
+        margin-bottom: 3em;
     }
     .postCard .postTitleNMeta{
         align-content: flex-start;
@@ -531,6 +760,19 @@
     }
     .gameCard .gameScore{
         font-size: 16px;
+    }
+    .projectLinks{
+        flex-direction: column;
+    }
+    .projectLinks a{
+        width: 100%;
+        text-align: center;
+        padding: 1em 0;
+    }
+    .backlog-progress-container .backlogFilter-btn button{
+        width: 100%;
+        text-align: center;
+        padding: 1em 0;
     }
 }
 

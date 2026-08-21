@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Navigate, useLocation  } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useLocation, Link  } from 'react-router-dom';
+import ScrollToTop from "react-scroll-to-top";
 import Layout from "../components/layout";
 import Badges from "../components/bades";
 import ReactMarkdown from 'react-markdown';
@@ -9,52 +10,164 @@ import rehypeRewrite from 'rehype-rewrite';
 import "./pages.css";
 import "../components/markdown.css"
 import { IoMdDownload } from "react-icons/io";
+import CalloutBlock from '../components/CalloutBlock';
 
 function Post () {
     const { postId } = useParams();
-    const location = useLocation(); // Получаем текущий путь для коррекции хешей
+    const location = useLocation();
     const validId = parseInt(postId);
-    // Ищем метаданные поста в JSON
     const [postData, setPostData] = useState(null);
-
-    // Состояние для полного текста (изначально берем превью из JSON)
-    const [fullContent, setFullContent] = useState(postData?.content || "");
-
+    const [fullContent, setFullContent] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [lightboxSrc, setLightboxSrc] = useState(null);
+
+    // Открыть лайтбокс
+    const openLightbox = useCallback((src) => {
+        setLightboxSrc(src);
+    }, []);
+
+    // Закрыть лайтбокс
+    const closeLightbox = useCallback(() => {
+        setLightboxSrc(null);
+    }, []);
+
+    // Закрытие по Escape
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape" && lightboxSrc) {
+                closeLightbox();
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [lightboxSrc, closeLightbox]);
+
+    // Делегирование клика на изображения внутри Markdown
+    const handleMarkdownClick = useCallback((e) => {
+        const img = e.target.closest('img');
+        if (img && img.src) {
+            openLightbox(img.src);
+        }
+    }, [openLightbox]);
 
     useEffect(() => {
-        // Загружаем общий список постов из public
-        fetch('/json/posts.json')
-            .then(res => res.json())
-            .then(data => {
-                const foundPost = data.find(p => p.id === validId);
-                if (foundPost) {
-                    setPostData(foundPost);
-                    // Устанавливаем превью, пока грузится основной файл
-                    setFullContent(foundPost.content || "");
-                    
-                    // Если есть путь к MD, грузим его
-                    if (foundPost.mdPath) {
-                        return fetch(`/content/${foundPost.mdPath}`);
-                    }
-                } else {
+    let cancelled = false;
+
+    const loadPost = async () => {
+        try {
+            const res = await fetch('/json/posts.json');
+            const data = await res.json();
+            const foundPost = data.find(p => p.id === validId);
+
+            if (!foundPost) {
+                if (!cancelled) {
+                    setPostData(null);
                     setIsLoading(false);
                 }
-            })
-            .then(res => res ? res.text() : null)
-            .then(text => {
-                if (text) {
-                    // Удаляем YAML метаданные (между ---)
-                    const cleanText = text.replace(/^---[\s\S]*?---/, '').trim();
+                return;
+            }
+
+            if (!cancelled) {
+                setPostData(foundPost);
+                setFullContent(foundPost.content || "");
+            }
+
+            if (foundPost.mdPath) {
+                const mdRes = await fetch(`/content/${foundPost.mdPath}`);
+                if (!mdRes.ok) throw new Error('MD файл не найден');
+                const text = await mdRes.text();
+                const cleanText = text.replace(/^---[\s\S]*?---/, '').trim();
+                if (!cancelled) {
                     setFullContent(cleanText);
                 }
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.error("Ошибка загрузки:", err);
-                setIsLoading(false);
-            });
-    }, [validId]);
+            }
+        } catch (err) {
+            console.error("Ошибка загрузки:", err);
+        } finally {
+            if (!cancelled) setIsLoading(false);
+        }
+    };
+
+    setIsLoading(true);
+    loadPost();
+
+    return () => { cancelled = true; };
+}, [validId]);
+
+useEffect(() => {
+    if (!postData) return;
+
+    // SEO title
+    document.title = `${postData.title} - AzurePlay | Markdown Blog`;
+    // SEO description
+    const description = (postData.content || '').substring(0, 200) + '...';
+    let metaDesc = document.head.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.setAttribute('name', 'description');
+        document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', description);
+    const keywords = postData.tags?.join(', ') || '';
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+        metaKeywords = document.createElement('meta');
+        metaKeywords.setAttribute('name', 'keywords');
+        document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.setAttribute('content', keywords);
+
+    const setMeta = (property, content) => {
+        let meta = document.querySelector(`meta[property="${property}"]`);
+        if (!meta) {
+            meta = document.createElement('meta');
+            meta.setAttribute('property', property);
+            document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', content);
+        // Гарантируем, что мета в head
+        if (!document.head.contains(meta)) {
+            document.head.appendChild(meta);
+        }
+    };
+
+    // Сохраняем текущие значения, чтобы вернуть их при уходе
+    const previousValues = {};
+    const metaProperties = ['og:title', 'og:description', 'og:image', 'og:url', 'og:type', 'twitter:card', 'twitter:title', 'twitter:description', 'twitter:image'];
+    metaProperties.forEach(prop => {
+        const existing = document.querySelector(`meta[property="${prop}"]`);
+        previousValues[prop] = existing ? existing.getAttribute('content') : null;
+    });
+
+
+    // Устанавливаем для поста
+    setMeta('og:title', postData.title);
+    setMeta('og:description', postData.content?.substring(0, 200) + "..." || '');
+    setMeta('og:image', postData.cover || '');
+    setMeta('og:url', window.location.href);
+    setMeta('og:type', 'article');
+    const isoDate = postData.date 
+        ? new Date(postData.date).toISOString() 
+        : '';
+    setMeta('article:published_time', isoDate);
+    setMeta('article:author', postData.author || '');
+    if (postData.tags && postData.tags.length > 0) {
+        setMeta('article:tag', postData.tags.slice(0, 5).join(', '));
+    }
+    setMeta('twitter:card', 'summary_large_image');
+    setMeta('twitter:title', postData.title);
+    setMeta('twitter:description', postData.content?.substring(0, 200) + "..." || '');
+    setMeta('twitter:image', postData.cover || '');
+
+    // При размонтировании возвращаем базовые значения
+    return () => {
+        metaProperties.forEach(prop => {
+            if (previousValues[prop]) {
+                setMeta(prop, previousValues[prop]);
+            }
+        });
+    };
+}, [postData]);
 
     useEffect(() => {
     // Функция для плавного скролла к элементу по хешу
@@ -84,10 +197,6 @@ function Post () {
         return () => window.removeEventListener("hashchange", scrollToHash);
     }, [fullContent]); // Перезапускаем, когда контент загружен
 
-    // Если загрузка завершена, а пост не найден
-    if (!isLoading && !postData) {
-        return <Navigate to="/404" />;
-    }
 
     // Пока идет самый первый запрос
     if (isLoading && !postData) {
@@ -97,51 +206,141 @@ function Post () {
     <div>
         <Layout>
             <div className="windowBase">
-                    <div className="windowName pageName windowNameFlex" style={{marginBottom: `0`}}>
-                        <h1>{postData.title}</h1>
+                <div className="windowName pageName windowNameFlex" style={{marginBottom: `0`}}>
+                    <h1>{postData.title}</h1>
+                    <div className="postOldActionButton">
                         <div className="postDownloadButton">
-                            <a href={`/content/${postData.mdPath}`} download={postData.mdPath} ><IoMdDownload /></a>
+                            <a href={`/content/${postData.mdPath}`} download={postData.mdPath}><IoMdDownload/></a>
+                        </div>
+                        <div className="postDownloadButtonNew">
+                            <Link to={`/testpost/${postId}`}>
+                                <span>⇌ Новый дизайн</span>
+                            </Link>
                         </div>
                     </div>
-                    <div className="windowContent" style={{marginBottom: `1em`}}>
-                        
-                        <div className="bigPostCover"><img src={postData.cover} alt="Обложка поста"/></div>
-                        <div className="markdown-body big-post-body" data-theme="dark" style={{marginBottom: `1em`}}>
-                            {/* Настройка ReactMarkdown с rehypeRewrite */}
-                            <ReactMarkdown 
-                                remarkPlugins={[remarkGfm]} 
-                                rehypePlugins={[
-                                    rehypeRaw,
-                                    [rehypeRewrite, {
-                                        rewrite: (node) => {
-                                            // Ищем все ссылки <a>, которые начинаются с # (сноски и якоря)
-                                            if (node.type === 'element' && node.tagName === 'a') {
-                                                const href = node.properties.href;
-                                                if (href && href.startsWith('#')) {
-                                                    // Превращаем "#fn-1" в "#/post/1#fn-1" для HashRouter
-                                                    node.properties.href = `#${location.pathname}${href}`;
-                                                }
+                </div>
+                <div className="windowContent" style={{marginBottom: `1em`}}>
+                    <div className="bigPostCover"><img src={postData.cover} alt="Обложка поста" style={{ cursor: 'pointer' }} onClick={() => openLightbox(postData.cover)}/></div>
+                    <div className="markdown-body big-post-body" data-theme="dark" style={{marginBottom: `1em`}} onClick={handleMarkdownClick}>
+                        {/* Настройка ReactMarkdown с rehypeRewrite */}
+                        <ReactMarkdown 
+                            remarkPlugins={[remarkGfm]} 
+                            rehypePlugins={[
+                                rehypeRaw,
+                                [rehypeRewrite, {
+                                    rewrite: (node) => {
+                                        // Ищем все ссылки <a>, которые начинаются с # (сноски и якоря)
+                                        if (node.type === 'element' && node.tagName === 'a') {
+                                            const href = node.properties.href;
+                                            if (href && href.startsWith('#')) {
+                                                // Превращаем "#fn-1" в "#/post/1#fn-1" для HashRouter
+                                                node.properties.href = `#${location.pathname}${href}`;
                                             }
                                         }
-                                    }]
-                                ]}
-                            >
-                                {fullContent}
-                            </ReactMarkdown>
-                        </div>
-                        <div className="bigPostTags">
-                            {postData.tags && postData.tags.map((tag, index) => (
-                                    <span key={index} className="bigPostTag">{tag}</span>
-                                ))}
-                        </div>
-                        <div className="bigPostAuthorNDate">
-                            <span>{postData.author}</span>
-                            <span>{postData.date}</span>
-                        </div>
+                                        // Добавляем класс к картинкам для стилизации курсора
+                                        if (node.type === 'element' && node.tagName === 'img') {
+                                            node.properties.className = node.properties.className || '';
+                                            node.properties.className += ' post-image-clickable';
+                                            node.properties.loading = 'lazy';
+                                        }
+                                    }
+                                }]
+                            ]}
+                            components={{
+                                blockquote: CalloutBlock,
+                            }}
+                        >
+                            {fullContent}
+                        </ReactMarkdown>
                     </div>
-                    <Badges/>
+                    <div className="bigPostTags">
+                        {postData.tags && postData.tags.map((tag, index) => (
+                                <span key={index} className="bigPostTag">{tag}</span>
+                            ))}
+                    </div>
+                    <div className="bigPostAuthorNDate">
+                        <span>{postData.author}</span>
+                        <span>{new Date(postData.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    </div>
                 </div>
+            </div>
+            <Badges/>
         </Layout>
+        <ScrollToTop smooth />
+
+            {/* Лайтбокс */}
+            {lightboxSrc && (
+                <div
+                    className="lightbox-overlay"
+                    onClick={closeLightbox}
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 9999,
+                        cursor: 'pointer',
+                    }}
+                >
+                    <button
+                        onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+                        style={{
+                            position: 'absolute',
+                            top: '20px',
+                            right: '30px',
+                            fontSize: '40px',
+                            color: '#fff',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            zIndex: 10000,
+                        }}
+                    >
+                        ✕
+                    </button>
+                    <a
+                        href={lightboxSrc}
+                        download
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            position: 'absolute',
+                            top: '30px',
+                            right: '80px',
+                            fontSize: '40px',
+                            color: '#fff',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            zIndex: 10000,
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '40px',
+                            height: '40px',
+                        }}
+                        title="Скачать изображение"
+                    >
+                        <IoMdDownload />
+                    </a>
+                    <img
+                        src={lightboxSrc}
+                        alt="Просмотр изображения"
+                        style={{
+                            maxWidth: '90vw',
+                            maxHeight: '90vh',
+                            objectFit: 'contain',
+                            cursor: 'default',
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+            )}
     </div>
     )
 };
