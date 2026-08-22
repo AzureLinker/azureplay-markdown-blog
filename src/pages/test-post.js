@@ -385,15 +385,15 @@ useEffect(() => {
                                 {fullContent}
                             </ReactMarkdown>
                         </div>
-                    </div>
-                    <div className="bigPostTags">
-                        {postData.tags && postData.tags.map((tag, index) => (
-                                <span key={index} className="bigPostTag">{tag}</span>
-                            ))}
-                    </div>
-                    <div className="bigPostAuthorNDate">
-                        <span>{postData.author}</span>
-                        <span>{new Date(postData.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                        <div className="bigPostTags">
+                            {postData.tags && postData.tags.map((tag, index) => (
+                                    <span key={index} className="bigPostTag">{tag}</span>
+                                ))}
+                        </div>
+                        <div className="bigPostAuthorNDate">
+                            <span>{postData.author}</span>
+                            <span>{new Date(postData.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                        </div>
                     </div>
                 </div>
                 <div className="windowBase windowBlogTags windowPostChapters">
