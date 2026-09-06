@@ -19,7 +19,7 @@ import ProjectLevel from './pages/projectLevel';
 import ProjectsOthers from './pages/projectsOthers';
 import ProjectOther from './pages/projectOther';
 import Gallery from './pages/gallery';
-import TestPost from './pages/test-post';
+import GuestbookPage from './pages/GuestbookPage';
 
 const container = document.getElementById('root');
 const root = createRoot(container); 
@@ -34,7 +34,6 @@ root.render(
       <Route path='/backlog' element={<Backlog/>} />
       <Route path='/404' element={<NEPage/>} />
       <Route path='/post/:postId' element={<Post/>} />
-      <Route path='/testpost/:postId' element={<TestPost/>} />
       <Route path='/projects/mods' element={<ProjectsMods/>} />
       <Route path='/projects/mods/:projectId' element={<ProjectMod/>} />
       <Route path='/projects/games' element={< ProjectsGames/>} />
@@ -43,6 +42,7 @@ root.render(
       <Route path='/projects/levels/:projectId' element={<ProjectLevel/>} />
       <Route path='/projects/other' element={<ProjectsOthers/>} />
       <Route path='/projects/other/:projectId' element={<ProjectOther/>} />
+      <Route path='/guestbook' element={<GuestbookPage/>} />
       <Route path="*" element={<NEPage />} />
     </Routes>
   </div>

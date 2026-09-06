@@ -92,8 +92,7 @@
 > 
 > </div>
 
-
-> [!note] Minecraft (2023 год)
+> [!note]- Minecraft (2023 год)
 > Здесь собраны скриншоты из архивных статей по Minecraft за 2023 год.
 >
 > <div class="gallery-grid">
@@ -115,5 +114,68 @@
 > ![Minecraft Alpha 1.0.2_02](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_3/11.jpg)
 >
 > ![Minecraft Alpha 1.0.3](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_4/5.jpg)
+>
+> </div>
+
+> [!note]- Minecraft Alpha (2024 год)
+> Здесь собраны скриншоты из архивных статей по Minecraft Alpha за 2024 год.
+>
+> <div class="gallery-grid">
+> 
+> ![Minecraft Alpha 1.0.4](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_5/6.jpg)
+>
+> ![Minecraft Alpha 1.0.5](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_6/03.jpg)
+>
+> ![Minecraft Alpha 1.0.5](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_6/21.jpg)
+>
+> ![Minecraft Alpha 1.0.5_01](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_7/03.jpg)
+>
+> ![Minecraft Alpha 1.0.5_01](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_7/10.jpg)
+>
+> ![Minecraft Alpha 1.0.6_03](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_8/03.jpg)
+>
+> ![Minecraft Alpha 1.0.6_03](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_8/03.jpg)
+>
+> ![Minecraft Alpha 1.0.6_03](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_8/07.jpg)
+>
+> ![Minecraft Alpha 1.0.6_03](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_8/25.jpg)
+>
+> ![Minecraft Alpha 1.0.7](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_9/08.jpg)
+>
+> ![Minecraft Alpha 1.0.8_01](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_10/07.jpg)
+>
+> ![Minecraft Alpha 1.0.9](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_11/05.jpg)
+>
+> ![Minecraft Alpha 1.0.9](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_11/12.jpg)
+>
+> ![Minecraft Alpha 1.0.10](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_12/13.jpg)
+>
+> ![Minecraft Alpha 1.0.10](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_12/16.jpg)
+>
+> ![Minecraft Alpha 1.0.10](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_12/16.jpg)
+>
+> ![Minecraft Alpha 1.0.11](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_13/04.jpg)
+>
+> ![Minecraft Alpha 1.0.11](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_13/08.jpg)
+>
+> ![Minecraft Alpha 1.0.11](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_13/10.jpg)
+>
+> ![Minecraft Alpha 1.0.11](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_13/27.jpg)
+>
+> ![Minecraft Alpha 1.0.12](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_14/05.jpg)
+>
+> ![Minecraft Alpha 1.0.13_01](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_15/03.jpg)
+>
+> ![Minecraft Alpha 1.0.13_01](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_15/03.jpg)
+>
+> ![Minecraft Alpha 1.0.13_01](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_15/09.jpg)
+>
+> ![Minecraft Alpha 1.0.13_01](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_15/13.jpg)
+>
+> ![Minecraft Alpha 1.0.14](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_16/05.gif)
+>
+> ![Minecraft Alpha 1.0.14](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_16/13.jpg)
+>
+> ![Minecraft Alpha 1.0.15](https://brainssmartgames.com/api/azure-play-img/MinecraftIsMyLife_17/04.jpg)
 >
 > </div>

@@ -4,6 +4,7 @@ created: 2026-04-06
 tags: Новости, Разговор, Обновления
 author: ZianU
 cover: https://zianu-azureplay.neocities.org/img/blog-covers/BlogPostPreview-compressed.png
+category: Новости
 ---
 Приветствую вас, дорогие читатели! Если вы сейчас читаете этот пост, значит у меня всё получилось, и мой сайт вышел в релиз! Добро пожаловать на markdown блог AzurePlay. Сегодня я покажу и расскажу вам, что здесь планируется, и для чего всё это было создано.
 

@@ -10,7 +10,23 @@ import rehypeRewrite from 'rehype-rewrite';
 import "./pages.css";
 import "../components/markdown.css"
 import { IoMdDownload } from "react-icons/io";
+import { IoMdShare } from "react-icons/io";
+import { LuTableOfContents } from "react-icons/lu";
+import { FaCommentAlt } from "react-icons/fa";
 import CalloutBlock from '../components/CalloutBlock';
+import TableOfContents from "../components/tableContents";
+import { generateId } from "../components/idGenerate";
+import Lightbox from "../components/Lightbox";
+import useLockBodyScroll from "../hooks/useLockBodyScroll";
+
+function getNodeText(node) {
+    if (!node) return '';
+    if (node.type === 'text') return node.value;
+    if (node.children && Array.isArray(node.children)) {
+        return node.children.map(getNodeText).join('');
+    }
+    return '';
+}
 
 function Post () {
     const { postId } = useParams();
@@ -19,16 +35,78 @@ function Post () {
     const [postData, setPostData] = useState(null);
     const [fullContent, setFullContent] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [headings, setHeadings] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleChapters = () => setIsOpen(!isOpen);
+    const closeChapters = () => setIsOpen(false);
     const [lightboxSrc, setLightboxSrc] = useState(null);
+    const [lightboxImages, setLightboxImages] = useState([]); // все URL'ы картинок
+    const [lightboxIndex, setLightboxIndex] = useState(0);    // индекс текущей
+    const [lightboxData, setLightboxData] = useState(null);
+    const [showScrollButton, setShowScrollButton] = useState(false);
+    useLockBodyScroll(isOpen);
+    
+    function extractImages(markdown) {
+        if (!markdown) return [];
+        const images = [];
+        
+        // Markdown: ![alt](url)
+        const mdRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+        let match;
+        while ((match = mdRegex.exec(markdown)) !== null) {
+            images.push({
+                src: match[2],
+                caption: match[1] || '',
+            });
+        }
 
-    // Открыть лайтбокс
+        // HTML: <img src="url" alt="caption">
+        const htmlRegex = /<img[^>]+src=["']([^"']+)["'][^>]*(?:alt=["']([^"']*)["'])?/g;
+        while ((match = htmlRegex.exec(markdown)) !== null) {
+            images.push({
+                src: match[1],
+                caption: match[2] || '',
+            });
+        }
+
+        // Убираем дубликаты по src
+        const unique = [];
+        const seen = new Set();
+        images.forEach(img => {
+            if (!seen.has(img.src)) {
+                seen.add(img.src);
+                unique.push(img);
+            }
+        });
+        return unique;
+    }
+
     const openLightbox = useCallback((src) => {
-        setLightboxSrc(src);
-    }, []);
+        const images = extractImages(fullContent); // массив { src, caption }
+        
+        // Добавляем обложку
+        if (postData?.cover && !images.find(img => img.src === postData.cover)) {
+            images.unshift({
+                src: postData.cover,
+                caption: postData.title || '',
+            });
+        }
+
+        const index = images.findIndex(img => img.src === src);
+        setLightboxData({ images, index: index >= 0 ? index : 0 });
+    }, [fullContent, postData]);
 
     // Закрыть лайтбокс
     const closeLightbox = useCallback(() => {
         setLightboxSrc(null);
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollButton(window.scrollY > 15);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     // Закрытие по Escape
@@ -49,6 +127,28 @@ function Post () {
             openLightbox(img.src);
         }
     }, [openLightbox]);
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!lightboxSrc) return;
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                const newIndex = lightboxIndex - 1;
+                if (newIndex >= 0) {
+                    setLightboxIndex(newIndex);
+                    setLightboxSrc(lightboxImages[newIndex]);
+                }
+            } else if (e.key === 'ArrowRight') {
+                const newIndex = lightboxIndex + 1;
+                if (newIndex < lightboxImages.length) {
+                    setLightboxIndex(newIndex);
+                    setLightboxSrc(lightboxImages[newIndex]);
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [lightboxSrc, lightboxIndex, lightboxImages, closeLightbox]);
 
     useEffect(() => {
     let cancelled = false;
@@ -125,7 +225,6 @@ useEffect(() => {
             document.head.appendChild(meta);
         }
         meta.setAttribute('content', content);
-        // Гарантируем, что мета в head
         if (!document.head.contains(meta)) {
             document.head.appendChild(meta);
         }
@@ -138,7 +237,6 @@ useEffect(() => {
         const existing = document.querySelector(`meta[property="${prop}"]`);
         previousValues[prop] = existing ? existing.getAttribute('content') : null;
     });
-
 
     // Устанавливаем для поста
     setMeta('og:title', postData.title);
@@ -197,6 +295,51 @@ useEffect(() => {
         return () => window.removeEventListener("hashchange", scrollToHash);
     }, [fullContent]); // Перезапускаем, когда контент загружен
 
+    function extractHeadings(markdown) {
+        if (!markdown) return [];
+    
+        const lines = markdown.split('\n');
+        const headingLines = [];
+
+        lines.forEach((line, index) => {
+            const match = line.match(/^(#{1,6})\s+(.+)$/);
+            if (match) {
+                const level = match[1].length;
+                const text = match[2].trim();
+                const id = generateId(text); // <-- здесь
+                headingLines.push({ level, text, id });
+            }
+        });
+
+    // Строим дерево: вложенные заголовки становятся детьми предыдущего родителя
+        const root = { children: [] };
+        const stack = [root]; // стек родителей
+
+        headingLines.forEach(heading => {
+            const node = { ...heading, children: [] };
+
+            // Ищем родителя: последний элемент в стеке с уровнем < текущего
+            while (stack.length > 1 && stack[stack.length - 1].level >= heading.level) {
+                stack.pop();
+            }
+
+            // Добавляем как ребёнка к текущему родителю
+            stack[stack.length - 1].children.push(node);
+            // Запоминаем как потенциального родителя для следующих
+            stack.push(node);
+        });
+
+        return root.children;
+    }
+
+    // После загрузки fullContent:
+    useEffect(() => {
+        if (fullContent) {
+            const tree = extractHeadings(fullContent);
+            setHeadings(tree);
+        }
+    }, [fullContent]);
+
 
     // Пока идет самый первый запрос
     if (isLoading && !postData) {
@@ -205,142 +348,147 @@ useEffect(() => {
     return ( 
     <div>
         <Layout>
-            <div className="windowBase">
-                <div className="windowName pageName windowNameFlex" style={{marginBottom: `0`}}>
-                    <h1>{postData.title}</h1>
-                    <div className="postOldActionButton">
-                        <div className="postDownloadButton">
-                            <a href={`/content/${postData.mdPath}`} download={postData.mdPath}><IoMdDownload/></a>
+            <div className="pageName"><h1>{postData.title}</h1></div>
+            <div className="windowGroup-2row">
+                <div className="windowBase windowPostNew">
+                    <div className="windowName pageName windowNameFlex" style={{marginBottom: `0`}}>
+                        <div className="postDownloadButtonNew">
+                            <a href={`/content/${postData.mdPath}`} download={postData.mdPath}>
+                                <IoMdDownload/>
+                                <span>Скачать</span>
+                            </a>
                         </div>
                         <div className="postDownloadButtonNew">
-                            <Link to={`/testpost/${postId}`}>
-                                <span>⇌ Новый дизайн</span>
-                            </Link>
+                            <button
+                                onClick={() => {
+                                    const postUrl = `https://zianu-azureplay.neocities.org/#/post/${postId}`;
+                                    navigator.clipboard.writeText(postUrl).then(() => {
+                                        window.location.hash = '/guestbook';
+                                        alert('Ссылка на пост скопирована! Вставьте её в поле "Пост" в гостевой книге.');
+                                    });
+                                }}
+                                title="Обсудить пост"
+                            >
+                                <FaCommentAlt />
+                                <span>Обсудить</span>
+                            </button>
+                        </div>
+                        <div className="postDownloadButtonNew">
+                            <button onClick={(e) => {
+                                e.stopPropagation();
+                                navigator.clipboard.writeText(window.location.href);
+                                alert('Ссылка скопирована!');
+                                
+                            }}
+                            title="Поделиться">
+                                <IoMdShare />
+                                <span>Поделиться</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="windowContent" style={{marginBottom: `1em`}}>
+                        <div className="bigPostCover"><img src={postData.cover} alt="Обложка поста" style={{ cursor: 'pointer' }} onClick={() => openLightbox(postData.cover)}/></div>
+                        <div className="markdown-body big-post-body" data-theme="dark" style={{marginBottom: `1em`}} onClick={handleMarkdownClick}>
+                            {/* Настройка ReactMarkdown с rehypeRewrite */}
+                            <ReactMarkdown 
+                                remarkPlugins={[remarkGfm]} 
+                                rehypePlugins={[
+                                    rehypeRaw,
+                                    [rehypeRewrite, {
+                                        rewrite: (node) => {
+                                            // Ищем все ссылки <a>, которые начинаются с # (сноски и якоря)
+                                            if (node.type === 'element' && node.tagName === 'a') {
+                                                const href = node.properties.href;
+                                                if (href && href.startsWith('#')) {
+                                                    // Превращаем "#fn-1" в "#/post/1#fn-1" для HashRouter
+                                                    node.properties.href = `#${location.pathname}${href}`;
+                                                }
+                                            }
+                                            // Добавляем класс к картинкам для стилизации курсора
+                                            if (node.type === 'element' && node.tagName === 'img') {
+                                                node.properties.className = node.properties.className || '';
+                                                node.properties.className += ' post-image-clickable';
+                                                node.properties.loading = 'lazy';
+                                            }
+                                            if (node.type === 'element' && /^h[1-6]$/.test(node.tagName)) {
+                                                const text = getNodeText(node);
+                                                node.properties.id = generateId(text);
+                                            }
+                                        }
+                                    }]
+                                ]}
+                                components={{
+                                    blockquote: CalloutBlock,
+                                }}
+                            >
+                                {fullContent}
+                            </ReactMarkdown>
+                        </div>
+                        <div className="bigPostTags">
+                            {postData.tags && postData.tags.map((tag, index) => (
+                                    <span key={index} className="bigPostTag">{tag}</span>
+                                ))}
+                        </div>
+                        <div className="bigPostAuthorNDate">
+                            <span>{postData.author}</span>
+                            <span>Категория: {postData.category || "Не указана"}</span>
+                            <span>{new Date(postData.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                         </div>
                     </div>
                 </div>
-                <div className="windowContent" style={{marginBottom: `1em`}}>
-                    <div className="bigPostCover"><img src={postData.cover} alt="Обложка поста" style={{ cursor: 'pointer' }} onClick={() => openLightbox(postData.cover)}/></div>
-                    <div className="markdown-body big-post-body" data-theme="dark" style={{marginBottom: `1em`}} onClick={handleMarkdownClick}>
-                        {/* Настройка ReactMarkdown с rehypeRewrite */}
-                        <ReactMarkdown 
-                            remarkPlugins={[remarkGfm]} 
-                            rehypePlugins={[
-                                rehypeRaw,
-                                [rehypeRewrite, {
-                                    rewrite: (node) => {
-                                        // Ищем все ссылки <a>, которые начинаются с # (сноски и якоря)
-                                        if (node.type === 'element' && node.tagName === 'a') {
-                                            const href = node.properties.href;
-                                            if (href && href.startsWith('#')) {
-                                                // Превращаем "#fn-1" в "#/post/1#fn-1" для HashRouter
-                                                node.properties.href = `#${location.pathname}${href}`;
-                                            }
-                                        }
-                                        // Добавляем класс к картинкам для стилизации курсора
-                                        if (node.type === 'element' && node.tagName === 'img') {
-                                            node.properties.className = node.properties.className || '';
-                                            node.properties.className += ' post-image-clickable';
-                                            node.properties.loading = 'lazy';
-                                        }
-                                    }
-                                }]
-                            ]}
-                            components={{
-                                blockquote: CalloutBlock,
-                            }}
-                        >
-                            {fullContent}
-                        </ReactMarkdown>
+                <div className="windowBase windowBlogTags windowPostChapters desktopChapters">
+                    <div className="windowName windowChaptersName" style={{marginBottom: `0`}}>
+                        <span>Оглавление</span>
                     </div>
-                    <div className="bigPostTags">
-                        {postData.tags && postData.tags.map((tag, index) => (
-                                <span key={index} className="bigPostTag">{tag}</span>
-                            ))}
-                    </div>
-                    <div className="bigPostAuthorNDate">
-                        <span>{postData.author}</span>
-                        <span>{new Date(postData.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    <div className={`windowContent chapterGroup ${isOpen ? "chapterGroupOpen" : ""}`} >
+                        {headings.length > 0 ? (
+                            <TableOfContents items={headings} pathname={location.pathname} />
+                        ) : (
+                            <span>Нет заголовков, или они не размечены</span>
+                        )}
                     </div>
                 </div>
+                {/* Кнопка-глава для мобильных — фиксированная */}
+                <button 
+                    className={`chapterFloatingBtn ${showScrollButton ? "chapterFloatingBtnVisible" : ""}`}
+                    onClick={toggleChapters}
+                >
+                    <LuTableOfContents />
+                </button>
+
+                {/* Модальное окно оглавления для мобильных */}
+                {isOpen && (
+                    <div className="chapterModalOverlay" onClick={closeChapters}>
+                        <div className="chapterModal" onClick={(e) => e.stopPropagation()}>
+                            <div className="chapterModalHeader">
+                                <span>Оглавление</span>
+                                <button onClick={closeChapters} className="chapterModalClose">✕</button>
+                            </div>
+                            <div className="chapterModalContent">
+                                {headings.length > 0 ? (
+                                    <TableOfContents 
+                                        items={headings} 
+                                        pathname={location.pathname} 
+                                        onNavigate={closeChapters}
+                                    />
+                                ) : (
+                                    <span>Нет заголовков, или они не размечены</span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             <Badges/>
         </Layout>
         <ScrollToTop smooth />
-
-            {/* Лайтбокс */}
-            {lightboxSrc && (
-                <div
-                    className="lightbox-overlay"
-                    onClick={closeLightbox}
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100vw',
-                        height: '100vh',
-                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 9999,
-                        cursor: 'pointer',
-                    }}
-                >
-                    <button
-                        onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
-                        style={{
-                            position: 'absolute',
-                            top: '20px',
-                            right: '30px',
-                            fontSize: '40px',
-                            color: '#fff',
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            zIndex: 10000,
-                        }}
-                    >
-                        ✕
-                    </button>
-                    <a
-                        href={lightboxSrc}
-                        download
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                            position: 'absolute',
-                            top: '30px',
-                            right: '80px',
-                            fontSize: '40px',
-                            color: '#fff',
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            zIndex: 10000,
-                            textDecoration: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '40px',
-                            height: '40px',
-                        }}
-                        title="Скачать изображение"
-                    >
-                        <IoMdDownload />
-                    </a>
-                    <img
-                        src={lightboxSrc}
-                        alt="Просмотр изображения"
-                        style={{
-                            maxWidth: '90vw',
-                            maxHeight: '90vh',
-                            objectFit: 'contain',
-                            cursor: 'default',
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    />
-                </div>
-            )}
+        {lightboxData && (
+            <Lightbox
+                images={lightboxData.images}
+                initialIndex={lightboxData.index}
+                onClose={() => setLightboxData(null)}
+            />
+        )}
     </div>
     )
 };

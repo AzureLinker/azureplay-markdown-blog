@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
@@ -6,8 +6,24 @@ import { Link } from 'react-router-dom';
 import "./components.css"
 import "./markdown.css"
 
-function ProjectsOtherList({projects}) {
-    const [currentPage, setCurrentPage] = useState(1);
+function highlightText(text, query) {
+    if (!query || query.trim() === '') return text;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const index = lowerText.indexOf(lowerQuery);
+    
+    if (index === -1) return text;
+    
+    return (
+        <>
+            {text.substring(0, index)}
+            <mark className="highlighted">{text.substring(index, index + query.length)}</mark>
+            {text.substring(index + query.length)}
+        </>
+    );
+}
+
+function ProjectsOtherList({projects, searchQuery, currentPage, setCurrentPage, selectedTags, selectedAuthors}) {
     const projectsPerPage = 10; // Сколько постов показывать на одной странице
 
     // Логика пагинации (без фильтрации)
@@ -15,6 +31,11 @@ function ProjectsOtherList({projects}) {
     const indexOfFirstProject = indexOfLastProject - projectsPerPage;
     const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
     const totalPages = Math.ceil(projects.length / projectsPerPage);
+
+    // Сбрасываем страницу при изменении данных
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [projects, searchQuery]);
 
     return (
             <div className="BlogPostSummary"> 
@@ -35,10 +56,10 @@ function ProjectsOtherList({projects}) {
                             <div className="projectName">
                                 {project.mdPath ? (
                                     // Если путь к MD есть — рендерим ссылку
-                                    <Link className="" to={`/projects/other/${project.id}`}>{project.title}</Link>
+                                    <Link className="" to={`/projects/other/${project.id}`}>{highlightText(project.title, searchQuery)}</Link>
                                 ) : (
                                     // Если пути нет — просто текст
-                                    <span>{project.title}</span>
+                                    <span>{highlightText(project.title, searchQuery)}</span>
                                 )}                                
                             </div>
                         </div>
@@ -77,7 +98,14 @@ function ProjectsOtherList({projects}) {
                         <div className="projectAuthors">
                             <p>Авторы: </p>
                             {project.authors && project.authors.map((a, index) => (
-                                <span key={index}>{a}</span>
+                                <span key={index} className={selectedAuthors?.includes(a) ? 'activeTag' : ''}>{a}</span>
+                            ))}
+                        </div>
+                        <div className="projectTags">
+                            {project.tags && project.tags.map((tag, index) => (
+                                <span key={index} className={selectedTags?.includes(tag) ? 'activeTag' : ''}>
+                                    {tag}
+                                </span>
                             ))}
                         </div>
                     </div>

@@ -1,5 +1,28 @@
 [
   {
+    "id": "komi-1",
+    "title": "[Komi-1]",
+    "platform": "PC",
+    "status": "В разработке",
+    "version": "build.080926",
+    "links": [],
+    "authors": [
+      "ZianU"
+    ],
+    "date_added": "2026-06-22",
+    "date_last_update": "2026-08-09",
+    "comment": "TBA",
+    "cover": "https://www.ngrkomi.ru/content/gallery-exhibitions/374/41259877.jpeg",
+    "mdPath": "",
+    "tags": [
+      "SeriousSam",
+      "SeriousSamTSE",
+      "Сюжетное",
+      "Модификация",
+      "Уровень"
+    ]
+  },
+  {
     "id": "yuri_academy_big_contest",
     "title": "Yuri Academy: Big Contest",
     "platform": "PC",
@@ -24,6 +47,13 @@
     "date_last_update": "2025-05-17",
     "comment": "В академии начинается большой конкурс, и юная Чио-сан горит желанием в нём победить. Однако всё не так просто: среди конкурентов оказывается надоедливый вампир, который хочет победы ничуть не меньше и обязательно будет вставлять палки в колёса главной героине. К чему же всё это приведёт?\n\nВ игре заклинания используют не ману, а слоты, которые быстро расходуются, и маги становятся бесполезными.\n\nИгра, созданная для Girly Game Jam 2025, и позже заброшенная из-за несформированной идеи геймпеля. Движок: RPG Maker MZ.",
     "cover": "https://zianu-azureplay.neocities.org/img/projects/games/yuriAcademy_GJDemo.png",
-    "mdPath": ""
+    "mdPath": "",
+    "tags": [
+      "SeriousSam",
+      "SeriousSamTSE",
+      "Сюжетное",
+      "Модификация",
+      "Уровень"
+    ]
   }
 ]

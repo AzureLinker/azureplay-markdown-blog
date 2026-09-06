@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
@@ -6,15 +6,35 @@ import { Link } from 'react-router-dom';
 import "./components.css"
 import "./markdown.css"
 
-function ProjectsLevelsList({levels}) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const levelsPerPage = 10; // Сколько постов показывать на одной странице
+function highlightText(text, query) {
+    if (!query || query.trim() === '') return text;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const index = lowerText.indexOf(lowerQuery);
+    
+    if (index === -1) return text;
+    
+    return (
+        <>
+            {text.substring(0, index)}
+            <mark className="highlighted">{text.substring(index, index + query.length)}</mark>
+            {text.substring(index + query.length)}
+        </>
+    );
+}
 
-    // Логика пагинации (без фильтрации)
+function ProjectsLevelsList({ levels, searchQuery, currentPage, setCurrentPage, selectedTags, selectedAuthors }) {
+    const levelsPerPage = 10;
+
     const indexOfLastGame = currentPage * levelsPerPage;
     const indexOfFirstGame = indexOfLastGame - levelsPerPage;
     const currentLevels = levels.slice(indexOfFirstGame, indexOfLastGame);
     const totalPages = Math.ceil(levels.length / levelsPerPage);
+
+    // Сбрасываем страницу при изменении данных
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [levels, searchQuery]);
 
 
     return (
@@ -36,14 +56,13 @@ function ProjectsLevelsList({levels}) {
                             <div className="projectName">
                                 {level.mdPath ? (
                                     // Если путь к MD есть — рендерим ссылку
-                                    <Link className="" to={`/projects/levels/${level.id}`}>{level.title}</Link>
+                                    <Link className="" to={`/projects/levels/${level.id}`}>{highlightText(level.title, searchQuery)}</Link>
                                 ) : (
                                     // Если пути нет — просто текст
-                                    <span>{level.title}</span>
+                                    <span>{highlightText(level.title, searchQuery)}</span>
                                 )}
                             </div>
                         </div>
-                        {/* Статус игры: "В процессе", "Пройдено", "В планах" */}
                             <div className="projectMeta">
                                 <p className="projectMetadata">{level.game_for} - {level.status}</p>
                                 <p className="projectMetadata">Версия: {level.version || "Версия не указана"}</p>
@@ -78,7 +97,14 @@ function ProjectsLevelsList({levels}) {
                         <div className="projectAuthors">
                             <p>Авторы: </p>
                             {level.authors && level.authors.map((a, index) => (
-                                <span key={index}>{a}</span>
+                                <span key={index} className={selectedAuthors?.includes(a) ? 'activeTag' : ''}>{a}</span>
+                            ))}
+                        </div>
+                        <div className="projectTags">
+                            {level.tags && level.tags.map((tag, index) => (
+                                <span key={index} className={selectedTags?.includes(tag) ? 'activeTag' : ''}>
+                                    {tag}
+                                </span>
                             ))}
                         </div>
                     </div>

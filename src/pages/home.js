@@ -51,27 +51,27 @@ function Home () {
                                 <p><a href="https://neocities.org/site/zianu-azureplay" target="_blank" rel="noopener noreferrer">Follow Me</a></p>
                             </div>
                             <div className="homeAvatar">
-                                <img src="/avatar512.png" alt="avatar"/>
+                                <img src="/avatar512.png" loading="lazy" alt="avatar"/>
                             </div>
                         </div>
                         <div className="profileBadges">
-                            <img src="/barsNBadges/girlbutton.gif" alt="web-badge"/>
-                            <img src="/barsNBadges/firefox2.gif" alt="web-badge"/>
-                            <img src="/barsNBadges/quake2now.gif" alt="web-badge"/>
-                            <img src="/barsNBadges/transnow2.gif" alt="web-badge"/>
-                            <img src="/barsNBadges/psbutton.gif" alt="web-badge"/>
-                            <img src="/barsNBadges/konata.gif" alt="web-badge"/>
-                            <img src="/barsNBadges/half-life.gif" alt="web-badge"/>
-                            <img src="/barsNBadges/k12.png" alt="web-badge"/>
-                            <img src="/barsNBadges/b8.gif" alt="web-badge"/>
+                            <img src="/barsNBadges/girlbutton.gif" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/firefox2.gif" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/quake2now.gif" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/transnow2.gif" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/psbutton.gif" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/konata.gif" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/half-life.gif" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/k12.png" loading="lazy" alt="web-badge"/>
+                            <img src="/barsNBadges/b8.gif" loading="lazy" alt="web-badge"/>
                         </div>
                         <div className="profileBars">
-                            <a href="https://mynickname.com/zianu" target="_blank" rel="noopener noreferrer"><img src="https://mynickname.com/img.php?nick=Zian+U&sert=2" alt="Никнейм Zian U зарегистрирован!" border="0" /></a>
-                            <img src="/barsNBadges/5e4c06fad486962e1caff8c0547ec03d.gif" alt="userbar" />
-                            <img src="/barsNBadges/d3bfd922f5de73048ed4f493d42db63e.png" alt="userbar" />
-                            <img src="/barsNBadges/05ead48c4bb2b0e941f4d5c1d1b39cd1.gif" alt="userbar" />
-                            <img src="/barsNBadges/40c0440b8c91b555b1681e7e620ac10f.gif" alt="userbar" />
-                            <img src="/barsNBadges/d8f79d9d0df3cad5bd686638b6dba1eb.gif" alt="userbar" />
+                            <a href="https://mynickname.com/zianu" target="_blank" rel="noopener noreferrer"><img src="https://mynickname.com/img.php?nick=Zian+U&sert=2" loading="lazy" alt="Никнейм Zian U зарегистрирован!" border="0" /></a>
+                            <img src="/barsNBadges/5e4c06fad486962e1caff8c0547ec03d.gif" loading="lazy" alt="userbar" />
+                            <img src="/barsNBadges/d3bfd922f5de73048ed4f493d42db63e.png" loading="lazy" alt="userbar" />
+                            <img src="/barsNBadges/05ead48c4bb2b0e941f4d5c1d1b39cd1.gif" loading="lazy" alt="userbar" />
+                            <img src="/barsNBadges/40c0440b8c91b555b1681e7e620ac10f.gif" loading="lazy" alt="userbar" />
+                            <img src="/barsNBadges/d8f79d9d0df3cad5bd686638b6dba1eb.gif" loading="lazy" alt="userbar" />
                         </div>
                     </div>
                 </div>

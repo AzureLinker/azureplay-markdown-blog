@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
@@ -6,8 +6,24 @@ import { Link } from 'react-router-dom';
 import "./components.css"
 import "./markdown.css"
 
-function ProjectsGamesList({games}) {
-    const [currentPage, setCurrentPage] = useState(1);
+function highlightText(text, query) {
+    if (!query || query.trim() === '') return text;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const index = lowerText.indexOf(lowerQuery);
+    
+    if (index === -1) return text;
+    
+    return (
+        <>
+            {text.substring(0, index)}
+            <mark className="highlighted">{text.substring(index, index + query.length)}</mark>
+            {text.substring(index + query.length)}
+        </>
+    );
+}
+
+function ProjectsGamesList({games, searchQuery, currentPage, setCurrentPage, selectedTags, selectedAuthors}) {
     const gamesPerPage = 10; // Сколько постов показывать на одной странице
 
     // Логика пагинации (без фильтрации)
@@ -15,6 +31,11 @@ function ProjectsGamesList({games}) {
     const indexOfFirstGame = indexOfLastGame - gamesPerPage;
     const currentGames = games.slice(indexOfFirstGame, indexOfLastGame);
     const totalPages = Math.ceil(games.length / gamesPerPage);
+
+    // Сбрасываем страницу при изменении данных
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [games, searchQuery]);
 
     return (
             <div className="BlogPostSummary"> 
@@ -35,14 +56,13 @@ function ProjectsGamesList({games}) {
                             <div className="projectName">
                                 {game.mdPath ? (
                                     // Если путь к MD есть — рендерим ссылку
-                                    <Link className="" to={`/projects/games/${game.id}`}>{game.title}</Link>
+                                    <Link className="" to={`/projects/games/${game.id}`}>{highlightText(game.title, searchQuery)}</Link>
                                 ) : (
                                     // Если пути нет — просто текст
-                                    <span>{game.title}</span>
+                                    <span>{highlightText(game.title, searchQuery)}</span>
                                 )}                                
                             </div>
                         </div>
-                        {/* Статус игры: "В процессе", "Пройдено", "В планах" */}
                             <div className="projectMeta">
                                 <p className="projectMetadata">{game.platform} - {game.status}</p>
                                 <p className="projectMetadata">Версия: {game.version || "Версия не указана"}</p>
@@ -77,7 +97,14 @@ function ProjectsGamesList({games}) {
                         <div className="projectAuthors">
                             <p>Авторы: </p>
                             {game.authors && game.authors.map((a, index) => (
-                                <span key={index}>{a}</span>
+                                <span key={index} className={selectedAuthors?.includes(a) ? 'activeTag' : ''}>{a}</span>
+                            ))}
+                        </div>
+                        <div className="projectTags">
+                            {game.tags && game.tags.map((tag, index) => (
+                                <span key={index} className={selectedTags?.includes(tag) ? 'activeTag' : ''}>
+                                    {tag}
+                                </span>
                             ))}
                         </div>
                     </div>

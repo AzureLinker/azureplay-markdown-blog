@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
@@ -6,8 +6,24 @@ import { Link } from 'react-router-dom';
 import "./components.css"
 import "./markdown.css"
 
-function ProjectsModsList({mods}) {
-    const [currentPage, setCurrentPage] = useState(1);
+function highlightText(text, query) {
+    if (!query || query.trim() === '') return text;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const index = lowerText.indexOf(lowerQuery);
+    
+    if (index === -1) return text;
+    
+    return (
+        <>
+            {text.substring(0, index)}
+            <mark className="highlighted">{text.substring(index, index + query.length)}</mark>
+            {text.substring(index + query.length)}
+        </>
+    );
+}
+
+function ProjectsModsList({mods, searchQuery, currentPage, setCurrentPage, selectedTags, selectedAuthors}) {
     const modsPerPage = 10; // Сколько постов показывать на одной странице
 
     // Логика пагинации (без фильтрации)
@@ -15,6 +31,11 @@ function ProjectsModsList({mods}) {
     const indexOfFirstGame = indexOfLastGame - modsPerPage;
     const currentMods = mods.slice(indexOfFirstGame, indexOfLastGame);
     const totalPages = Math.ceil(mods.length / modsPerPage);
+
+    // Сбрасываем страницу при изменении данных
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [mods, searchQuery]);
 
     return (
             <div className="BlogPostSummary"> 
@@ -35,10 +56,10 @@ function ProjectsModsList({mods}) {
                             <div className="projectName">
                                 {mod.mdPath ? (
                                     // Если путь к MD есть — рендерим ссылку
-                                    <Link className="" to={`/projects/mods/${mod.id}`}>{mod.title}</Link>
+                                    <Link className="" to={`/projects/mods/${mod.id}`}>{highlightText(mod.title, searchQuery)}</Link>
                                 ) : (
                                     // Если пути нет — просто текст (можно добавить класс для стилизации)
-                                    <span>{mod.title}</span>
+                                    <span>{highlightText(mod.title, searchQuery)}</span>
                                 )}
                             </div>
                         </div>
@@ -77,7 +98,14 @@ function ProjectsModsList({mods}) {
                         <div className="projectAuthors">
                             <p>Авторы: </p>
                             {mod.authors && mod.authors.map((a, index) => (
-                                <span key={index}>{a}</span>
+                                <span key={index} className={selectedAuthors?.includes(a) ? 'activeTag' : ''}>{a}</span>
+                            ))}
+                        </div>
+                        <div className="projectTags">
+                            {mod.tags && mod.tags.map((tag, index) => (
+                                <span key={index} className={selectedTags?.includes(tag) ? 'activeTag' : ''}>
+                                    {tag}
+                                </span>
                             ))}
                         </div>
                     </div>

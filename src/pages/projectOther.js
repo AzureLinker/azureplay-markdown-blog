@@ -11,6 +11,7 @@ import "./pages.css";
 import "../components/markdown.css"
 import { IoMdDownload } from "react-icons/io";
 import CalloutBlock from '../components/CalloutBlock';
+import Lightbox from "../components/Lightbox";
 
 function ProjectOther () {
     const { projectId } = useParams();
@@ -19,11 +20,59 @@ function ProjectOther () {
     const [fullContent, setFullContent] = useState(projectData?.comment || "");
     const [isLoading, setIsLoading] = useState(true);
     const [lightboxSrc, setLightboxSrc] = useState(null);
+    const [lightboxImages, setLightboxImages] = useState([]); // все URL'ы картинок
+    const [lightboxIndex, setLightboxIndex] = useState(0);    // индекс текущей
+    const [lightboxData, setLightboxData] = useState(null);
 
-    // Открыть лайтбокс
+    function extractImages(markdown) {
+        if (!markdown) return [];
+        const images = [];
+        
+        // Markdown: ![alt](url)
+        const mdRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+        let match;
+        while ((match = mdRegex.exec(markdown)) !== null) {
+            images.push({
+                src: match[2],
+                caption: match[1] || '',
+            });
+        }
+
+        // HTML: <img src="url" alt="caption">
+        const htmlRegex = /<img[^>]+src=["']([^"']+)["'][^>]*(?:alt=["']([^"']*)["'])?/g;
+        while ((match = htmlRegex.exec(markdown)) !== null) {
+            images.push({
+                src: match[1],
+                caption: match[2] || '',
+            });
+        }
+
+        // Убираем дубликаты по src
+        const unique = [];
+        const seen = new Set();
+        images.forEach(img => {
+            if (!seen.has(img.src)) {
+                seen.add(img.src);
+                unique.push(img);
+            }
+        });
+        return unique;
+    }
+
     const openLightbox = useCallback((src) => {
-        setLightboxSrc(src);
-    }, []);
+        const images = extractImages(fullContent); // массив { src, caption }
+        
+        // Добавляем обложку
+        if (projectData?.cover && !images.find(img => img.src === projectData.cover)) {
+            images.unshift({
+                src: projectData.cover,
+                caption: projectData.title || '',
+            });
+        }
+
+        const index = images.findIndex(img => img.src === src);
+        setLightboxData({ images, index: index >= 0 ? index : 0 });
+    }, [fullContent, projectData]);
 
     // Закрыть лайтбокс
     const closeLightbox = useCallback(() => {
@@ -48,6 +97,28 @@ function ProjectOther () {
             openLightbox(img.src);
         }
     }, [openLightbox]);
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!lightboxSrc) return;
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                const newIndex = lightboxIndex - 1;
+                if (newIndex >= 0) {
+                    setLightboxIndex(newIndex);
+                    setLightboxSrc(lightboxImages[newIndex]);
+                }
+            } else if (e.key === 'ArrowRight') {
+                const newIndex = lightboxIndex + 1;
+                if (newIndex < lightboxImages.length) {
+                    setLightboxIndex(newIndex);
+                    setLightboxSrc(lightboxImages[newIndex]);
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [lightboxSrc, lightboxIndex, lightboxImages, closeLightbox]);
 
     useEffect(() => {
         let cancelled = false;
@@ -261,78 +332,12 @@ function ProjectOther () {
                 </div>
         </Layout>
         <ScrollToTop smooth />
-        {/* Лайтбокс */}
-        {lightboxSrc && (
-            <div
-                className="lightbox-overlay"
-                onClick={closeLightbox}
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 9999,
-                    cursor: 'pointer',
-                }}
-            >
-                <button
-                    onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
-                    style={{
-                        position: 'absolute',
-                        top: '20px',
-                        right: '30px',
-                        fontSize: '40px',
-                        color: '#fff',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        zIndex: 10000,
-                    }}
-                >
-                    ✕
-                </button>
-                <a
-                    href={lightboxSrc}
-                    download
-                    onClick={(e) => e.stopPropagation()}
-                    style={{
-                        position: 'absolute',
-                        top: '30px',
-                        right: '80px',
-                        fontSize: '40px',
-                        color: '#fff',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        zIndex: 10000,
-                        textDecoration: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '40px',
-                        height: '40px',
-                    }}
-                    title="Скачать изображение"
-                >
-                    <IoMdDownload />
-                </a>
-                <img
-                    src={lightboxSrc}
-                    alt="Просмотр изображения"
-                    style={{
-                        maxWidth: '90vw',
-                        maxHeight: '90vh',
-                        objectFit: 'contain',
-                        cursor: 'default',
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                />
-            </div>
+        {lightboxData && (
+            <Lightbox
+                images={lightboxData.images}
+                initialIndex={lightboxData.index}
+                onClose={() => setLightboxData(null)}
+            />
         )}
     </div>
     )

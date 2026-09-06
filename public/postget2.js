@@ -3,7 +3,6 @@ const fs = require("fs");
 
 const pagePath = path.join(__dirname, "../public/content");
 const postsOutputPath = path.join(__dirname, "../public/json/posts.json");
-const tagsOutputPath = path.join(__dirname, "../public/json/tags.json");
 
 const getPosts = () => {
     try {
@@ -64,6 +63,7 @@ const getPosts = () => {
                     id: id,
                     title: rawMetadata.title || "",
                     author: rawMetadata.author || "",
+                    category: rawMetadata.category || "",
                     date: dateStr,
                     tags: tagsArray,
                     cover: rawMetadata.cover || "",
@@ -81,13 +81,12 @@ const getPosts = () => {
 
         fs.writeFileSync(postsOutputPath, JSON.stringify(postList, null, 2), "utf8");
 
-                        // Сортировка тегов: по убыванию популярности, потом по алфавиту
+        // Сортировка тегов: по убыванию популярности, потом по алфавиту
         const tagsList = Array.from(allTags).sort((a, b) => {
             const countDiff = tagCounts[b] - tagCounts[a]; // по убыванию
             if (countDiff !== 0) return countDiff;
             return a.localeCompare(b); // по алфавиту, если счётчики равны
         });
-        fs.writeFileSync(tagsOutputPath, JSON.stringify(tagsList, null, 2), "utf8");
 
         console.log(`Успешно! Создано постов: ${postList.length}, найдено уникальных тегов: ${tagsList.length}`);
 

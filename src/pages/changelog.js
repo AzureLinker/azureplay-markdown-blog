@@ -67,34 +67,34 @@ function Changelog () {
             <div className="pageName"><h1>Список изменений</h1></div>
             <div className="markdown-body" data-theme="dark" style={{ marginBottom: `1em`, borderRadius: `1em`}}>
                 <ReactMarkdown 
-                                                remarkPlugins={[remarkGfm]} 
-                                                rehypePlugins={[
-                                                    rehypeRaw,
-                                                    [rehypeRewrite, {
-                                                        rewrite: (node) => {
-                                                            // Ищем все ссылки <a>, которые начинаются с # (сноски и якоря)
-                                                            if (node.type === 'element' && node.tagName === 'a') {
-                                                                const href = node.properties.href;
-                                                                if (href && href.startsWith('#')) {
-                                                                    // Превращаем "#fn-1" в "#/post/1#fn-1" для HashRouter
-                                                                    node.properties.href = `#${location.pathname}${href}`;
-                                                                }
-                                                            }
-                                                            // Добавляем класс к картинкам для стилизации курсора
-                                                            if (node.type === 'element' && node.tagName === 'img') {
-                                                                node.properties.className = node.properties.className || '';
-                                                                node.properties.className += ' post-image-clickable';
-                                                                node.properties.loading = 'lazy';
-                                                            }
-                                                        }
-                                                    }]
-                                                ]}
-                                                components={{
-                                                    blockquote: CalloutBlock,
-                                                }}
-                                            >
-                                                {content}
-                                            </ReactMarkdown>
+                    remarkPlugins={[remarkGfm]} 
+                    rehypePlugins={[
+                        rehypeRaw,
+                        [rehypeRewrite, {
+                            rewrite: (node) => {
+                                // Ищем все ссылки <a>, которые начинаются с # (сноски и якоря)
+                                if (node.type === 'element' && node.tagName === 'a') {
+                                    const href = node.properties.href;
+                                    if (href && href.startsWith('#')) {
+                                        // Превращаем "#fn-1" в "#/post/1#fn-1" для HashRouter
+                                        node.properties.href = `#${location.pathname}${href}`;
+                                    }
+                                }
+                                // Добавляем класс к картинкам для стилизации курсора
+                                if (node.type === 'element' && node.tagName === 'img') {
+                                    node.properties.className = node.properties.className || '';
+                                    node.properties.className += ' post-image-clickable';
+                                    node.properties.loading = 'lazy';
+                                }
+                            }
+                        }]
+                    ]}
+                    components={{
+                        blockquote: CalloutBlock,
+                    }}
+                >
+                        {content}
+                </ReactMarkdown>
             </div>
             <Badges/>
         </Layout>

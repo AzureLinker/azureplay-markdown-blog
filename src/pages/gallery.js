@@ -12,6 +12,7 @@ import { IoMdDownload } from "react-icons/io";
 import "./pages.css";
 import useMetaTags from "../components/useMetaTags";
 import usePageMeta from "../components/usePageMeta";
+import Lightbox from "../components/Lightbox";
 
 
 function Gallery () {
@@ -33,6 +34,7 @@ function Gallery () {
     const [lightboxImages, setLightboxImages] = useState([]);
     const [lightboxIndex, setLightboxIndex] = useState(0);
     const [lightboxCaption, setLightboxCaption] = useState('');
+    const [lightboxData, setLightboxData] = useState(null);
     function extractImages(markdown) {
         if (!markdown) return [];
         const images = [];
@@ -70,12 +72,9 @@ function Gallery () {
 
     // Открыть лайтбокс
     const openLightbox = useCallback((src) => {
-        const images = extractImages(content);
+        const images = extractImages(content); // { src, caption }
         const index = images.findIndex(img => img.src === src);
-        setLightboxImages(images);
-        setLightboxIndex(index >= 0 ? index : 0);
-        setLightboxSrc(src);
-        setLightboxCaption(index >= 0 ? images[index].caption : '');
+        setLightboxData({ images, index: index >= 0 ? index : 0 });
     }, [content]);
 
     // Закрыть лайтбокс
@@ -201,160 +200,12 @@ function Gallery () {
             <Badges/>
         </Layout>
         <ScrollToTop smooth />
-        {/* Лайтбокс */}
-        {lightboxSrc && (
-            <div
-                className="lightbox-overlay"
-                onClick={closeLightbox}
-                onTouchStart={(e) => {
-                    const touch = e.touches[0];
-                    // Сохраняем начальную позицию касания
-                    e.currentTarget.dataset.touchStartX = touch.clientX;
-                }}
-                onTouchEnd={(e) => {
-                    const touchEndX = e.changedTouches[0].clientX;
-                    const touchStartX = parseFloat(e.currentTarget.dataset.touchStartX);
-                    if (!isNaN(touchStartX)) {
-                        const diff = touchStartX - touchEndX;
-                        // Свайп влево (следующая картинка)
-                        if (diff > 50 && lightboxIndex < lightboxImages.length - 1) {
-                            goToImage(lightboxIndex + 1);
-                        }
-                        // Свайп вправо (предыдущая картинка)
-                        else if (diff < -50 && lightboxIndex > 0) {
-                            goToImage(lightboxIndex - 1);
-                        }
-                    }
-                }}
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 9999,
-                    cursor: 'pointer',
-                }}
-            >
-                <button
-                    onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
-                    style={{
-                        position: 'absolute',
-                        top: '20px',
-                        right: '30px',
-                        fontSize: '40px',
-                        color: '#fff',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        zIndex: 10000,
-                    }}
-                >
-                    ✕
-                </button>
-                <a
-                    href={lightboxSrc}
-                    download
-                    onClick={(e) => e.stopPropagation()}
-                    style={{
-                        position: 'absolute',
-                        top: '30px',
-                        right: '80px',
-                        fontSize: '40px',
-                        color: '#fff',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        zIndex: 10000,
-                        textDecoration: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '40px',
-                        height: '40px',
-                    }}
-                    title="Скачать изображение"
-                >
-                    <IoMdDownload />
-                </a>
-                {/* Кнопка "Назад" */}
-                {lightboxImages.length > 1 && (
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const newIndex = lightboxIndex - 1;
-                            goToImage(newIndex);
-                        }}
-                        disabled={lightboxIndex === 0}
-                        style={{
-                            color: lightboxIndex === 0 ? '#555' : '#fff',
-                            cursor: lightboxIndex === 0 ? 'default' : 'pointer',
-                        }}
-                        className="lightbox-Back"
-                    >
-                        ⯇
-                    </button>
-                )}
-                {/* Кнопка "Вперёд" */}
-                {lightboxImages.length > 1 && (
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const newIndex = lightboxIndex + 1;
-                            goToImage(newIndex);
-                        }}
-                        disabled={lightboxIndex === lightboxImages.length - 1}
-                        style={{
-                            color: lightboxIndex === lightboxImages.length - 1 ? '#555' : '#fff',
-                            cursor: lightboxIndex === lightboxImages.length - 1 ? 'default' : 'pointer',
-                        }}
-                        className="lightbox-Next"
-                    >
-                        ⯈
-                    </button>
-                )}
-                {/* Счётчик */}
-                {lightboxImages.length > 1 && (
-                    <div
-                        className="lightbox-Counter"
-                    >
-                        {lightboxIndex + 1} / {lightboxImages.length}
-                    </div>
-                )}
-                <img
-                    src={lightboxSrc}
-                    alt="Просмотр изображения"
-                    style={{
-                        maxWidth: '90vw',
-                        maxHeight: '90vh',
-                        objectFit: 'contain',
-                        cursor: 'default',
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                />
-                {lightboxCaption && (
-                    <div style={{
-                        position: 'absolute',
-                        bottom: '60px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        color: '#fff',
-                        fontSize: '14px',
-                        zIndex: 10000,
-                        background: 'rgba(0,0,0,0.7)',
-                        padding: '8px 16px',
-                        borderRadius: '4px',
-                        maxWidth: '80%',
-                        textAlign: 'center',
-                    }}>
-                        {lightboxCaption}
-                    </div>
-                )}
-            </div>
+        {lightboxData && (
+            <Lightbox
+                images={lightboxData.images}
+                initialIndex={lightboxData.index}
+                onClose={() => setLightboxData(null)}
+            />
         )}
     </div>
     )

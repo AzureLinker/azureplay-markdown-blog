@@ -162,6 +162,7 @@
 .windowPostChapters{
     position: sticky;
     top: 0;
+    max-width: 384px;
 }
 
 .windowPostChapters .windowContent{
@@ -320,6 +321,7 @@
     box-shadow: 0 4px 11px -2px #4F91FB;
     padding: 0.7em;
     cursor: pointer;
+    filter: hue-rotate(120deg);
 }
 .tagSearchWindow .resetTagSelect:hover{
     background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
@@ -429,6 +431,10 @@
     padding: 0.2em 1em;
     box-shadow: inset 0 0 6.8px #4F91FB;
     border-radius: 1em;
+}
+
+.projectCard .projectAuthors span.activeTag{
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
 }
 
 .windowGroup-3row{
@@ -549,47 +555,6 @@
 .windowPostNew{
     max-width: calc(100% - 1em - 384px);
 }
-.lightbox-Back{
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 50px;
-    background: none;
-    border: medium;
-    z-index: 10000;
-    border-radius: 4px;
-}
-.lightbox-Back:hover{
-    background: rgba(192, 215, 250, 0.192);
-}
-.lightbox-Next{
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 50px;
-    background: none;
-    border: medium;
-    z-index: 10000;
-    border-radius: 4px;
-}
-.lightbox-Next:hover{
-    background: rgba(192, 215, 250, 0.192);
-}
-.lightbox-Counter{
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgb(255, 255, 255);
-    font-size: 16px;
-    z-index: 10000;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-family: "Nunito", sans-serif;
-}
 .chapterToggle{
     display: none;
     width: 100%;
@@ -609,6 +574,103 @@
 }
 .chapterToggle.chapterToggleOpen{
     border-radius: 1em 1em 0 0;
+}
+
+/* Кнопка-глава, видимая только на мобильных */
+.chapterFloatingBtn {
+    background-color: white;
+    right: 40px;
+    bottom: 100px;
+    position: fixed;
+    z-index: 2;
+    cursor: pointer;
+    border-radius: 7px;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 9px 25px 0 rgba(132, 128, 177, 0.28);
+    border: none;
+    color: #000;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    display: none;
+}
+
+.chapterFloatingBtnVisible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Модальное окно оглавления */
+.chapterModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+}
+
+.chapterModal {
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+}
+
+.chapterModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: .5em 1em .5em 1em;
+    box-sizing: border-box;
+    border: 1px solid #9DBFDD;
+    border-radius: 1em 1em 0 0;
+    box-shadow: inset 0 0 6.8px #1B1E5C;
+    box-shadow: 0 4px 11px -2px #4F91FB80;
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(34, 32, 75, 1) 15%, rgba(21, 10, 50, 1) 35%, rgba(21, 10, 50, 1) 75%, rgba(56, 69, 117, 1) 90%, rgba(113, 163, 224, 1) 100%);
+}
+.chapterModalHeader span{
+    background: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(152, 221, 255, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    background-clip: border-box;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.chapterModalClose {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 900;
+    background: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(152, 221, 255, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    background-clip: border-box;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 24px;
+}
+.chapterModalContent{
+    width: 100%;
+    padding: .5em;
+    box-sizing: border-box;
+    background-color: #2A2A2A;
+    border-radius: 0 0 1em 1em;
+    border-bottom: 1px solid #9DBFDD;
+    border-left: 1px solid #9DBFDD;
+    border-right: 1px solid #9DBFDD;
+    box-shadow: inset 0 0 6.8px #1B1E5C;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    max-height: calc(80vh - 3em);
+    overflow-y: auto;
 }
 .postOldActionButton{
     display: flex;
@@ -640,14 +702,14 @@
     transform: scale(1.05);
 }
 
+.desktopChapters{
+    display: block;
+    max-width: 384px;
+}
+
 @media (max-width: 1024px) {
     .windowGroup-3row{
         flex-wrap: wrap;
-    }
-    .windowBlogTags{
-        max-width: 100%;
-        text-align: left;
-        margin-bottom: 0;
     }
     .windowPostChapters{
         position: relative;
@@ -691,6 +753,11 @@
 }
 
 @media (max-width: 768px) {
+    .windowBlogTags{
+        max-width: 100%;
+        text-align: left;
+        margin-bottom: 0;
+    }
     .siteCap{
         height: 120px;
     }
@@ -729,12 +796,6 @@
     .postDownloadButtonNew{
         width: 100%;
     }
-    .lightbox-Back{
-        top: 90%;
-    }
-    .lightbox-Next{
-        top: 90%;
-    }
     .chapterToggle{
         display: block;
     }
@@ -743,6 +804,12 @@
     }
     .chapterGroup.chapterGroupOpen{
         display: block;
+    }
+    .desktopChapters{
+        display: none;
+    }
+    .chapterFloatingBtn.chapterFloatingBtnVisible {
+        display: flex;
     }
     .chapterGroup{
         display: none;
@@ -844,16 +911,6 @@
         text-align: center;
         display: flex;
         justify-content: center;
-    }
-    .lightbox-Back{
-        font-size: 24px;
-        bottom: 20px;
-        top: auto;
-    }
-    .lightbox-Next{
-        font-size: 24px;
-        bottom: 20px;
-        top: auto;
     }
 }
 

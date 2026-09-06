@@ -314,7 +314,7 @@
     padding-bottom: 1em;
     margin-bottom: 1em;
 }
-.postCard .postTitleNMeta{
+.postCard .postTitle{
     width: 100%;
     box-sizing:border-box;
     display: inline-flex;
@@ -330,18 +330,39 @@
     margin-bottom: 1em;
 }
 
-.postTitleNMeta .postName{
+.postTitle .postName{
     font-size: 24px;
     font-weight: bold;
     text-decoration: none;
     color: #fff;
 
 }
-.postTitleNMeta .postName:hover{
+.postTitle .postName:hover{
     color: #7ac1ff;
 }
-.postTitleNMeta .postMeta{
-    font-size: 16px;
+
+.postCard .postMeta{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 0;
+    margin-bottom: 1em;
+    border-top: 1px solid #9DBFDD;
+    border-bottom: 1px solid #9DBFDD;
+}
+
+.postCard .postMetadata{
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: right;
+    font-size: 18px;
+}
+
+.postCard .postCategory{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 18px;
+    margin-bottom: 1em;
 }
 
 .postCard .postShortNPicture{
@@ -446,6 +467,7 @@
     box-shadow: 0 4px 11px -2px #4F91FB;
     padding: 0.7em;
     cursor: pointer;
+    filter: hue-rotate(120deg);
 }
 .searchBar .resetSearchSelect:hover{
     background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
@@ -600,10 +622,359 @@
 .backlog-progress-container .segment-заброшено, .dot-заброшено { background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%); }
 .backlog-progress-container .segment-не-указано, .dot-не-указано { background: linear-gradient(180deg, #bdc3c7 0%, #95a5a6 100%); }
 
+
+.lightbox-Back{
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 50px;
+    background: none;
+    border: medium;
+    z-index: 10000;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lightbox-Back:hover{
+    background: rgba(192, 215, 250, 0.192);
+}
+.lightbox-Next{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 50px;
+    background: none;
+    border: medium;
+    z-index: 10000;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lightbox-Next:hover{
+    background: rgba(192, 215, 250, 0.192);
+}
+.lightbox-Counter{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: "Nunito", sans-serif;
+}
+.lightbox-Caption{
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 1rem;
+    z-index: 10001;
+    background: rgba(0,0,0,0.7);
+    padding: 8px 16px;
+    border-radius: 8px;
+    max-width: 80%;
+    text-align: center;
+}
+.lightbox-Dwnld{
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    color: #fff;
+    font-size: 2.5rem;
+    z-index: 10001;
+    background: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+}
+.lightbox-Dwnld:hover{
+    background: rgba(192, 215, 250, 0.192);
+}
+.lightbox-Close{
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 2.5rem;
+    z-index: 10001;
+    background: none;
+    cursor: pointer;
+    border: none;
+    padding: 0 8px;
+    border-radius: 8px;
+}
+.lightbox-Close:hover{
+    background: rgba(192, 215, 250, 0.192);
+}
+
+.projectFilters {
+    
+}
+
+.filterInput {
+    box-sizing: border-box;
+    border-radius: .5em;
+    padding: .3em .5em;
+    width: 100%;
+    font-size: 14px;
+    font-family: "Nunito", sans-serif;
+    border: 1px solid #080B0D;
+    background: linear-gradient(180deg,rgba(0, 0, 0, 1) 0%, rgba(31, 31, 31, 1) 5%, rgba(50, 50, 50, 1) 95%, rgba(0, 0, 0, 1) 100%);
+    color: #fff;
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    margin-bottom: 1em;
+}
+
+.filterInput::placeholder{
+    color: #969696;
+}
+.filterInput:focus{
+    border: 1px solid #9DBFDD;
+    outline: none;
+}
+.filterInput:active{
+    border: 1px solid #9DBFDD;
+    outline: none;
+}
+
+.filterSelect {
+    padding: 8px 12px;
+    border: none;
+    background: #212121;
+    color: #fff;
+    width: 100%;
+    font-family: "Nunito", sans-serif;
+    margin-bottom: 1em;
+}
+
+.filterSelect:hover {
+    filter: brightness(120%);
+}
+
+.filterCheckbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+.filterCheckbox:last-of-type{
+    margin-bottom: 1em;
+}
+
+.filterCheckbox input{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    position: relative;
+}
+.filterCheckbox .checkbox{
+    position: absolute;
+    left: 1em;
+    height: 16px;
+    width: 16px;
+    background-color: #eee;
+    border-radius: 4px;
+}
+.filterCheckbox .checkmark{
+    margin-left: 1em;
+}
+
+.filterCheckbox input ~ .checkbox{
+    background-color: #414141;
+}
+
+.filterCheckbox .checkbox::after{
+    content: "";
+    position: absolute;
+    display: none;
+    top: 2px;
+    left: 2px;
+    border-radius: 4px;
+}
+
+.filterCheckbox input:checked ~ .checkbox::after{
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-color: #208fed;
+}
+
+.filterCheckbox:hover{
+    background: #3d444d;
+}
+
+.filterSort {
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
+}
+
+.sortDirectionBtn {
+    padding: 8px 12px;
+    border: none;
+    background: #212121;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 1em;
+}
+
+.sortDirectionBtn:hover{
+    background: #3d444d;
+}
+
+.clearFilters {
+    border-radius: 1em;
+    color: #fff;
+    border: solid 1px #9DBFDD;
+    background: #71A3E0;
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(21, 10, 50, 1) 15%, rgba(56, 69, 117, 1) 90%, rgba(113, 163, 224, 1) 100%);
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    box-shadow: 0 4px 11px -2px #4F91FB;
+    padding: 0.7em;
+    cursor: pointer;
+    filter: hue-rotate(120deg);
+    width: 100%;
+}
+
+.clearFilters:hover {
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
+}
+
+.highlighted {
+    background: #ffc10773;
+    color: #fff;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.multiFilter {
+    position: relative;
+    display: inline-block;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.multiFilterOptions {
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    background: #212121;
+    border: 1px solid #565656;
+    border-radius: 6px;
+    padding: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    min-width: 180px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    scrollbar-width: thin;
+    margin-bottom: 1em;
+}
+
+.multiFilterOptions label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9em;
+    user-select: none;
+}
+
+.multiFilterOptions label:hover {
+    background: #3d444d;
+}
+
+.multiFilterOptions input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.projectTags{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    gap: 1em;
+    font-size: 14px;
+    margin-bottom: 1em;
+}
+.projectTags span{
+    padding: 0.2em 1em;
+    background: linear-gradient(180deg,rgba(14, 93, 161, 1) 5%, rgba(16, 55, 113, 1) 20%, rgba(7, 28, 64, 1) 80%, rgba(0, 0, 0, 0) 100%);
+    box-shadow: inset 0 0 6.8px #4F91FB;
+    border-radius: 1em;
+}
+
+.projectTags span.activeTag{
+    background: linear-gradient(180deg,rgba(113, 163, 224, 1) 0%, rgba(83, 136, 219, 1) 25%, rgba(73, 94, 174, 1) 69%, rgba(113, 163, 224, 1) 100%);
+}
+.QTPOC{
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid rgb(255, 255, 255);
+    border-image-outset: 0;
+    border-image-repeat: stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-image: linear-gradient( 180deg, rgb(226, 22, 192) 0%, rgb(242, 191, 23) 20%, rgb(223, 211, 0) 40%, rgb(157, 250, 44) 60%, rgb(12, 77, 255) 80%, rgb(104, 31, 199) 100% );
+    border-image-slice: 100%;
+    border-image-slice: 1;
+    background: black;
+    font-weight: bold;
+    color: #4493f8;
+}
+.QTPOCFlex{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    border-bottom: solid 1px #9DBFDD;
+    padding-bottom: 5px;
+}
+.QTPOCFlex a{
+    width: 100%;
+    color: #4493f8;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+}
+.QTPOCFlex a:hover{
+    color: #7ac1ff;
+}
+.badgesComponent{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1em;
+}
+
 @media (max-width: 1024px) {
-    .windowGroup-2row{
-        flex-direction: column-reverse;
-    }
     .siteHeader a{
         padding: 0.2em .5em;
         text-align: center;
@@ -642,6 +1013,9 @@
 }
 
 @media (max-width: 768px) {
+    .windowGroup-2row{
+        flex-direction: column-reverse;
+    }
     .menuToggle {
         display: block;
         width: 100%;
@@ -737,24 +1111,40 @@
     .gameCard .gameComment img{
         width: 100%;
     }
+    .lightbox-Counter{
+        top: 80px;
+        bottom: auto;
+    }
+    .lightbox-Back{
+        top: auto;
+        bottom: 15%;
+    }
+    .lightbox-Next{
+        top: auto;
+        bottom: 15%;
+    }
+    .badgesComponent{
+        flex-direction: column;
+        gap: 1em;
+    }
 }
 
 @media (max-width: 425px) {
     .pageContentContainer {
         padding: 1em 0.3em;
     }
-    .postCard .postTitleNMeta{
+    .postCard .postTitle{
         align-content: flex-start;
         flex-direction: column;
     }
-    .postTitleNMeta .postName{
+    .postTitle .postName{
         width: 100%;
         font-size: 20px;
     }
-    .postTitleNMeta .postName a{
+    .postTitle .postName a{
         display: block;
     }
-    .postTitleNMeta .postMeta{
+    .postTitle .postMeta{
         width: 100%;
     }
     .siteHeader .navGroup{
@@ -783,6 +1173,14 @@
         width: 100%;
         text-align: center;
         padding: 1em 0;
+    }
+    .lightbox-Back{
+        font-size: 24px;
+        top: auto;
+    }
+    .lightbox-Next{
+        font-size: 24px;
+        top: auto;
     }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
@@ -6,43 +6,41 @@ import { Link } from 'react-router-dom';
 import "./components.css"
 import "./markdown.css"
 
-function PostList ({ filterTag, postlist }) {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
+function highlightText(text, query) {
+    if (!query || query.trim() === '') return text;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const index = lowerText.indexOf(lowerQuery);
+    
+    if (index === -1) return text;
+    
+    return (
+        <>
+            {text.substring(0, index)}
+            <mark className="highlighted">{text.substring(index, index + query.length)}</mark>
+            {text.substring(index + query.length)}
+        </>
+    );
+}
+
+function PostList ({ postlist, searchQuery, currentPage, setCurrentPage, selectedTags }) {
     const postsPerPage = 10; // Сколько постов показывать на одной странице
 
-    // Сбрасываем страницу на первую, если изменился выбранный тег
+    // Сбрасываем страницу при изменении данных
     useEffect(() => {
         setCurrentPage(1);
-    }, [filterTag]);
-
-    // Улучшенная фильтрация: учитываем и поиск, и выбранный тег
-    const filteredPosts = postlist.filter(post => {
-        const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
-        
-        // Если тег не выбран — подходят все, если выбран — ищем его в массиве post.tags
-        const matchesTag = filterTag 
-            ? post.tags && post.tags.includes(filterTag) 
-            : true;
-
-        return matchesSearch && matchesTag;
-    });
+    }, [postlist, searchQuery]);
 
     //Логика расчета индексов
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     
     //Получаем только нужную часть постов для текущей страницы
-    const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = postlist.slice(indexOfFirstPost, indexOfLastPost);
 
     //Логика для кнопок (общее кол-во страниц)
-    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+    const totalPages = Math.ceil(postlist.length / postsPerPage);
 
-    // Хендлер для поиска (сбрасывает страницу на 1 при вводе)
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-        setCurrentPage(1); 
-    };
     return (
         <div className="BlogPostSummary">
             {/* Пагинация */}
@@ -53,19 +51,6 @@ function PostList ({ filterTag, postlist }) {
                     <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Вперед</button>
                 </div>
             )}
-            {/* Поле поиска */}
-            <div className="searchBar">
-                <input 
-                    type="text" 
-                    placeholder="Поиск..." 
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className="searchInput"
-                />
-                {searchQuery.length > 0 && (
-                    <button onClick={() => setSearchQuery("")} className="resetSearchSelect">Сбросить</button>
-                )}
-            </div>
             {currentPosts.length > 0 ? (
                 currentPosts.map((post) => {
                     //Генерируем превью текста (256 символов)
@@ -75,11 +60,14 @@ function PostList ({ filterTag, postlist }) {
 
                     return (
                         <div key={post.id} className="postCard"> 
-                            <div className="postTitleNMeta">
+                            <div className="postTitle">
                                 <div className="postName">
-                                    <Link className="postName" to={`/post/${post.id}`}>{post.title}</Link>
+                                    <Link className="postName" to={`/post/${post.id}`}>{highlightText(post.title, searchQuery)}</Link>
                                 </div>
-                                <div className="postMeta">{post.author} - {new Date(post.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                            </div>
+                            <div className="postMeta">
+                                <p className="postMetadata">{post.author}</p>
+                                <p className="postMetadata">{new Date(post.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                             </div>
                             <div className="postShortNPicture">
                                 <div className="postShort markdown-body" data-theme="dark">
@@ -91,9 +79,10 @@ function PostList ({ filterTag, postlist }) {
                                     <img src={post.cover} alt="Обложка поста" loading="lazy"/>
                                 </div>
                             </div>
+                            <div className="postCategory">Категория: {post.category || "Не указана"}</div>
                             <div className="postTags">
                                 {post.tags && post.tags.map((tag, index) => (
-                                    <span key={index} className={tag === filterTag ? "activeTag" : ""}>
+                                    <span key={index} className={selectedTags?.includes(tag) ? 'activeTag' : ''}>
                                         {tag}
                                     </span>
                                 ))}

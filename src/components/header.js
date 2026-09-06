@@ -51,6 +51,7 @@ function Header () {
                     <button className={`navBtn navDrpDwnBtn ${isDropped_2 ? "navDrpBtnClck" : ""}`} onClick={toggleDrop2}>Блог</button>
                     <div className="drpDwnCnt">
                         <Link to="/blog" className="navBtn" onClick={closeMenu}>Посты</Link>
+                        <Link to="/guestbook" className="navBtn" onClick={closeMenu}>Гостевая книга</Link>
                         <Link to="/gallery" className="navBtn" onClick={closeMenu}>Галерея</Link>
                         <a href="/rss.xml" className="navBtn" onClick={closeMenu} target="_blank" rel="noopener noreferrer">RSS</a>
                     </div>

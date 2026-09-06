@@ -1,5 +1,28 @@
 [
   {
+    "id": "TFE_in_Nutshell",
+    "title": "TFE in Nutshell",
+    "game_for": "Serious Sam The Second Encounter",
+    "status": "В разработке",
+    "version": "build.1",
+    "links": [],
+    "authors": [
+      "ZianU"
+    ],
+    "date_added": "2026-08-27",
+    "date_last_update": "2026-08-27",
+    "comment": "Так как мой краткий рассказ про Half-Life™ хорошо зашёл, то я решила сделать карту, и также и видос про такое же дело касаемо Serious Sam The First Encounter™.\n\nСначала я сделаю видео забавное, а потом уже, соответственно, выпущу карту в полноценный релиз. Также выпущу девлог по проектам.",
+    "cover": "https://zianu-azureplay.neocities.org/img/projects/levels/SeriousEditor_Custom_PDhi6wasiT.png",
+    "mdPath": "",
+    "tags": [
+      "SeriousSam",
+      "SeriousSamTSE",
+      "Сюжетное",
+      "Модификация",
+      "Уровень"
+    ]
+  },
+  {
     "id": "trials_chambers",
     "title": "Trial Chambers",
     "game_for": "Serious Sam The Second Encounter",
@@ -10,7 +33,7 @@
       "ZianU"
     ],
     "date_added": "2026-04-26",
-    "date_last_update": "2026-05-20",
+    "date_last_update": "2026-08-29",
     "comment": "Решила наконец вновь заняться картостроением для Serious Sam The Second Encounter™. На данный момент ещё пока выстраиваю базовую архитекруту, хотя парочку комнат уже детализировала и осветила.\n\nПока что рабочее название это либо 'Камеры Испытаний', либо 'Храм Испытаний'. Ещё не определилась.\n\nНо зато у карты уже есть идея, и хотя бы базовая схема всех комнат.\n\nОказывается можно в основном всё освещение из Serious Sam 2 спокойно перенести на движок первых двух пришествий, с этим освещением карта выглядит ещё лучше, так что как закончу, займусь улучшением освещения.\n\nКогда выпущу карту, сделаю ещё и девлог.",
     "cover": "https://zianu-azureplay.neocities.org/img/projects/levels/Discord_Fyol8Mh9ex-compressed.png",
     "mdPath": "",

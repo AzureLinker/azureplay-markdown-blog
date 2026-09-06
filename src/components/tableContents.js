@@ -1,4 +1,4 @@
-export default function TableOfContents({ items, pathname }) {
+export default function TableOfContents({ items, pathname, onNavigate }) {
     if (!items || items.length === 0) return null;
 
     const renderItems = (itemsArray) => {
@@ -14,6 +14,7 @@ export default function TableOfContents({ items, pathname }) {
                             const el = document.getElementById(item.id);
                             if (el) {
                                 el.scrollIntoView({ behavior: 'smooth' });
+                                if (onNavigate) onNavigate();
                             }
                         }, 50);
                     }}
