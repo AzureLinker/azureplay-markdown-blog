@@ -1,5 +1,22 @@
 [
   {
+    "id": 1788998400000,
+    "title": "Serious Sam Classic и EAX.",
+    "author": "ZianU",
+    "category": "Гайды",
+    "date": "2026-09-10",
+    "tags": [
+      "SeriousSam",
+      "SeriousSamTFE",
+      "SeriousSamTSE",
+      "Гайд",
+      "EAX"
+    ],
+    "cover": "https://zianu-azureplay.neocities.org/img/blog-covers/SamClassicEAX.jpg",
+    "content": "Приветствую вас, дорогие читатели. Играли ли вы в Serious Sam? А хотите поиграть? Или вы, может быть, делаете карты для классического Сэма, и вам хочется крутых звуковых эффекта, добившись интересного ощущения?\n\nЗамечали ли вы в редакторе такую интересную ...",
+    "mdPath": "SeriousSamEAX.md"
+  },
+  {
     "id": 1788566400000,
     "title": "Архив \"Майнкрафт это жизнь\" - неделя 18: Alpha 1.0.16_02",
     "author": "ZianU",

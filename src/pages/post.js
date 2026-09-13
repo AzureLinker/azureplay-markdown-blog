@@ -349,8 +349,131 @@ useEffect(() => {
     <div>
         <Layout>
             <div className="pageName"><h1>{postData.title}</h1></div>
-            <div className="windowGroup-2row">
-                <div className="windowBase windowPostNew">
+            {headings.length > 0 ? (
+                <div className="windowGroup-2row">
+                    <div className="windowBase windowPostNew">
+                        <div className="windowName pageName windowNameFlex" style={{marginBottom: `0`}}>
+                            <div className="postDownloadButtonNew">
+                                <a href={`/content/${postData.mdPath}`} download={postData.mdPath}>
+                                    <IoMdDownload/>
+                                    <span>Скачать</span>
+                                </a>
+                            </div>
+                            <div className="postDownloadButtonNew">
+                                <button
+                                    onClick={() => {
+                                        const postUrl = `https://zianu-azureplay.neocities.org/#/post/${postId}`;
+                                        navigator.clipboard.writeText(postUrl).then(() => {
+                                            window.location.hash = '/guestbook';
+                                            alert('Ссылка на пост скопирована! Вставьте её в поле "Пост" в гостевой книге.');
+                                        });
+                                    }}
+                                    title="Обсудить пост"
+                                >
+                                    <FaCommentAlt />
+                                    <span>Обсудить</span>
+                                </button>
+                            </div>
+                            <div className="postDownloadButtonNew">
+                                <button onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigator.clipboard.writeText(window.location.href);
+                                    alert('Ссылка скопирована!');
+
+                                }}
+                                title="Поделиться">
+                                    <IoMdShare />
+                                    <span>Поделиться</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div className="windowContent" style={{marginBottom: `1em`}}>
+                            <div className="bigPostCover"><img src={postData.cover} alt="Обложка поста" style={{ cursor: 'pointer' }} onClick={() => openLightbox(postData.cover)}/></div>
+                            <div className="markdown-body big-post-body" data-theme="dark" style={{marginBottom: `1em`}} onClick={handleMarkdownClick}>
+                                {/* Настройка ReactMarkdown с rehypeRewrite */}
+                                <ReactMarkdown 
+                                    remarkPlugins={[remarkGfm]} 
+                                    rehypePlugins={[
+                                        rehypeRaw,
+                                        [rehypeRewrite, {
+                                            rewrite: (node) => {
+                                                // Ищем все ссылки <a>, которые начинаются с # (сноски и якоря)
+                                                if (node.type === 'element' && node.tagName === 'a') {
+                                                    const href = node.properties.href;
+                                                    if (href && href.startsWith('#')) {
+                                                        // Превращаем "#fn-1" в "#/post/1#fn-1" для HashRouter
+                                                        node.properties.href = `#${location.pathname}${href}`;
+                                                    }
+                                                }
+                                                // Добавляем класс к картинкам для стилизации курсора
+                                                if (node.type === 'element' && node.tagName === 'img') {
+                                                    node.properties.className = node.properties.className || '';
+                                                    node.properties.className += ' post-image-clickable';
+                                                    node.properties.loading = 'lazy';
+                                                }
+                                                if (node.type === 'element' && /^h[1-6]$/.test(node.tagName)) {
+                                                    const text = getNodeText(node);
+                                                    node.properties.id = generateId(text);
+                                                }
+                                            }
+                                        }]
+                                    ]}
+                                    components={{
+                                        blockquote: CalloutBlock,
+                                    }}
+                                >
+                                    {fullContent}
+                                </ReactMarkdown>
+                            </div>
+                            <div className="bigPostTags">
+                                {postData.tags && postData.tags.map((tag, index) => (
+                                        <span key={index} className="bigPostTag">{tag}</span>
+                                    ))}
+                            </div>
+                            <div className="bigPostAuthorNDate">
+                                <span>{postData.author}</span>
+                                <span>Категория: {postData.category || "Не указана"}</span>
+                                <span>{new Date(postData.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="windowBase windowBlogTags windowPostChapters desktopChapters">
+                        <div className="windowName windowChaptersName" style={{marginBottom: `0`}}>
+                            <span>Оглавление</span>
+                        </div>
+                        <div className={`windowContent chapterGroup ${isOpen ? "chapterGroupOpen" : ""}`} >
+                            <TableOfContents items={headings} pathname={location.pathname} />
+                        </div>
+                    </div>
+                    {/* Кнопка-глава для мобильных — фиксированная */}
+                    <button 
+                        className={`chapterFloatingBtn ${showScrollButton ? "chapterFloatingBtnVisible" : ""}`}
+                        onClick={toggleChapters}
+                    >
+                        <LuTableOfContents />
+                    </button>
+
+                    {/* Модальное окно оглавления для мобильных */}
+                    {isOpen && (
+                        <div className="chapterModalOverlay" onClick={closeChapters}>
+                            <div className="chapterModal" onClick={(e) => e.stopPropagation()}>
+                                <div className="chapterModalHeader">
+                                    <span>Оглавление</span>
+                                    <button onClick={closeChapters} className="chapterModalClose">✕</button>
+                                </div>
+                                <div className="chapterModalContent">
+                                    <TableOfContents 
+                                        items={headings} 
+                                        pathname={location.pathname} 
+                                        onNavigate={closeChapters}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className="windowBase">
                     <div className="windowName pageName windowNameFlex" style={{marginBottom: `0`}}>
                         <div className="postDownloadButtonNew">
                             <a href={`/content/${postData.mdPath}`} download={postData.mdPath}>
@@ -378,7 +501,6 @@ useEffect(() => {
                                 e.stopPropagation();
                                 navigator.clipboard.writeText(window.location.href);
                                 alert('Ссылка скопирована!');
-                                
                             }}
                             title="Поделиться">
                                 <IoMdShare />
@@ -436,49 +558,7 @@ useEffect(() => {
                         </div>
                     </div>
                 </div>
-                <div className="windowBase windowBlogTags windowPostChapters desktopChapters">
-                    <div className="windowName windowChaptersName" style={{marginBottom: `0`}}>
-                        <span>Оглавление</span>
-                    </div>
-                    <div className={`windowContent chapterGroup ${isOpen ? "chapterGroupOpen" : ""}`} >
-                        {headings.length > 0 ? (
-                            <TableOfContents items={headings} pathname={location.pathname} />
-                        ) : (
-                            <span>Нет заголовков, или они не размечены</span>
-                        )}
-                    </div>
-                </div>
-                {/* Кнопка-глава для мобильных — фиксированная */}
-                <button 
-                    className={`chapterFloatingBtn ${showScrollButton ? "chapterFloatingBtnVisible" : ""}`}
-                    onClick={toggleChapters}
-                >
-                    <LuTableOfContents />
-                </button>
-
-                {/* Модальное окно оглавления для мобильных */}
-                {isOpen && (
-                    <div className="chapterModalOverlay" onClick={closeChapters}>
-                        <div className="chapterModal" onClick={(e) => e.stopPropagation()}>
-                            <div className="chapterModalHeader">
-                                <span>Оглавление</span>
-                                <button onClick={closeChapters} className="chapterModalClose">✕</button>
-                            </div>
-                            <div className="chapterModalContent">
-                                {headings.length > 0 ? (
-                                    <TableOfContents 
-                                        items={headings} 
-                                        pathname={location.pathname} 
-                                        onNavigate={closeChapters}
-                                    />
-                                ) : (
-                                    <span>Нет заголовков, или они не размечены</span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
+            )}
             <Badges/>
         </Layout>
         <ScrollToTop smooth />

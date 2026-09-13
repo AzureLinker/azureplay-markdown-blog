@@ -5,9 +5,24 @@
             <link>https://zianu-azureplay.neocities.org</link>
             <description>Блог ZianU об играх, прохождениях и мыслях.</description>
             <language>ru</language>
-            <lastBuildDate>Sat, 05 Sep 2026 16:45:07 GMT</lastBuildDate>
+            <lastBuildDate>Thu, 10 Sep 2026 17:58:48 GMT</lastBuildDate>
             <atom:link href="https://zianu-azureplay.neocities.org/rss.xml" rel="self" type="application/rss+xml"/>
             
+        <item>
+            <title>Serious Sam Classic и EAX.</title>
+            <link>https://zianu-azureplay.neocities.org/#/post/1788998400000</link>
+            <guid isPermaLink="true">https://zianu-azureplay.neocities.org/#/post/1788998400000</guid>
+            <pubDate>Thu, 10 Sep 2026 00:00:00 GMT</pubDate>
+            <description>Приветствую вас, дорогие читатели. Играли ли вы в Serious Sam? А хотите поиграть? Или вы, может быть, делаете карты для классического Сэма, и вам хочется крутых звуковых эффекта, добившись интересного ощущения?. Замечали ли вы в редакторе такую интересную </description>
+            <author>ZianU</author>
+            <media:content url="https://zianu-azureplay.neocities.org/img/blog-covers/SamClassicEAX.jpg" medium="image"/>
+            <enclosure url="https://zianu-azureplay.neocities.org/img/blog-covers/SamClassicEAX.jpg" type="image/jpeg" length="0"/>
+            <category>SeriousSam</category>
+      <category>SeriousSamTFE</category>
+      <category>SeriousSamTSE</category>
+      <category>Гайд</category>
+      <category>EAX</category>
+        </item>
         <item>
             <title>Архив &quot;Майнкрафт это жизнь&quot; - неделя 18: Alpha 1.0.16_02</title>
             <link>https://zianu-azureplay.neocities.org/#/post/1788566400000</link>
@@ -328,21 +343,6 @@
       <category>Заметки</category>
       <category>Журнал</category>
       <category>Архив</category>
-        </item>
-        <item>
-            <title>Архив журнала «Что Такое». Эпизод 5 - Portal</title>
-            <link>https://zianu-azureplay.neocities.org/#/post/1783555200000</link>
-            <guid isPermaLink="true">https://zianu-azureplay.neocities.org/#/post/1783555200000</guid>
-            <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
-            <description>Приветствую вас, дорогие читатели! Сегодня я показываю вам пятый архивный выпуск журнала &quot;Что Такое:&quot;. Это был выпуск по пятому ролику, выпущенному 13 февраля 2024 года, по замечательной игры от Valve - [Portal](https://www.youtube.com/watch?v=xnAIgj2brj8.</description>
-            <author>ZianU</author>
-            <media:content url="https://i.ytimg.com/vi/xnAIgj2brj8/maxresdefault.jpg" medium="image"/>
-            <enclosure url="https://i.ytimg.com/vi/xnAIgj2brj8/maxresdefault.jpg" type="image/jpeg" length="0"/>
-            <category>Архив</category>
-      <category>ЧтоТакое</category>
-      <category>Журнал</category>
-      <category>Обзор</category>
-      <category>Portal</category>
         </item>
         </channel>
     </rss>
