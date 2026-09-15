@@ -1,5 +1,24 @@
 [
   {
+    "id": 1789257600000,
+    "title": "Архив \"Майнкрафт это жизнь\" - неделя 19: Alpha 1.0.17_04",
+    "author": "ZianU",
+    "category": "Игры",
+    "date": "2026-09-13",
+    "tags": [
+      "Прохождение",
+      "Мысли",
+      "Minecraft",
+      "Альфа",
+      "Заметки",
+      "Журнал",
+      "Архив"
+    ],
+    "cover": "https://brainssmartgames.com/api/azure-play-img/blog-covers/minecraftislife-19.png",
+    "content": "Приветствую вас, дорогие читатели текстовых блогов от Zian U, и это девятнадцатая статья о моём **похождении в Minecraft**. Сегодня на повестке дня Alpha 1.0.17_04, последняя версия перед Alpha 1.1.0.\n\nВ этой статье уже явно побольше контента, да и есть оп...",
+    "mdPath": "MinecraftIsLife-19.md"
+  },
+  {
     "id": 1788998400000,
     "title": "Serious Sam Classic и EAX.",
     "author": "ZianU",

@@ -23,6 +23,9 @@ public/projectsContent/Other/*
 public/projectsContent/Games/*
 public/projectsContent/Levels/*
 public/projectsContent/Mods/*
+public/json/*
+public/barsNBadges/*
+public/rss.xml
 
 # misc
 .DS_Store

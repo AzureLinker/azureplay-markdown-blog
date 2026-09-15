@@ -5,9 +5,26 @@
             <link>https://zianu-azureplay.neocities.org</link>
             <description>Блог ZianU об играх, прохождениях и мыслях.</description>
             <language>ru</language>
-            <lastBuildDate>Thu, 10 Sep 2026 17:58:48 GMT</lastBuildDate>
+            <lastBuildDate>Sun, 13 Sep 2026 15:52:50 GMT</lastBuildDate>
             <atom:link href="https://zianu-azureplay.neocities.org/rss.xml" rel="self" type="application/rss+xml"/>
             
+        <item>
+            <title>Архив &quot;Майнкрафт это жизнь&quot; - неделя 19: Alpha 1.0.17_04</title>
+            <link>https://zianu-azureplay.neocities.org/#/post/1789257600000</link>
+            <guid isPermaLink="true">https://zianu-azureplay.neocities.org/#/post/1789257600000</guid>
+            <pubDate>Sun, 13 Sep 2026 00:00:00 GMT</pubDate>
+            <description>Приветствую вас, дорогие читатели текстовых блогов от Zian U, и это девятнадцатая статья о моём похождении в Minecraft. Сегодня на повестке дня Alpha 1.0.17_04, последняя версия перед Alpha 1.1.0.. В этой статье уже явно побольше контента, да и есть оп...</description>
+            <author>ZianU</author>
+            <media:content url="https://brainssmartgames.com/api/azure-play-img/blog-covers/minecraftislife-19.png" medium="image"/>
+            <enclosure url="https://brainssmartgames.com/api/azure-play-img/blog-covers/minecraftislife-19.png" type="image/jpeg" length="0"/>
+            <category>Прохождение</category>
+      <category>Мысли</category>
+      <category>Minecraft</category>
+      <category>Альфа</category>
+      <category>Заметки</category>
+      <category>Журнал</category>
+      <category>Архив</category>
+        </item>
         <item>
             <title>Serious Sam Classic и EAX.</title>
             <link>https://zianu-azureplay.neocities.org/#/post/1788998400000</link>
@@ -326,23 +343,6 @@
       <category>Обзор</category>
       <category>Quake</category>
       <category>Quake2</category>
-        </item>
-        <item>
-            <title>Архив &quot;Майнкрафт это жизнь&quot; - неделя 4: Alpha 1.0.3</title>
-            <link>https://zianu-azureplay.neocities.org/#/post/1783641600000</link>
-            <guid isPermaLink="true">https://zianu-azureplay.neocities.org/#/post/1783641600000</guid>
-            <pubDate>Fri, 10 Jul 2026 00:00:00 GMT</pubDate>
-            <description>Приветствую вас, дорогие читатели текстовых блогов от Zian U, и это четвёртая статья о моём похождении в Minecraft. Сегодня на повестке дня Alpha 1.0.3.. К сожалению статья эта очень маленькая, как и многие, которые я делала изначально, потому что они ...</description>
-            <author>ZianU</author>
-            <media:content url="https://brainssmartgames.com/api/azure-play-img/blog-covers/minecraftislife-4.webp" medium="image"/>
-            <enclosure url="https://brainssmartgames.com/api/azure-play-img/blog-covers/minecraftislife-4.webp" type="image/jpeg" length="0"/>
-            <category>Прохождение</category>
-      <category>Мысли</category>
-      <category>Minecraft</category>
-      <category>Альфа</category>
-      <category>Заметки</category>
-      <category>Журнал</category>
-      <category>Архив</category>
         </item>
         </channel>
     </rss>
